@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery Manager | Rosemary Williams</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+	  tailwind.config = {
+	    theme: {
+	      extend: {
+	        fontFamily: {
+	          sans: ['Montserrat', 'sans-serif'],
+	          serif: ['Cormorant Garamond', 'serif'],
+	        },
+	        colors: {
+	          cream: '#fcfbf9',
+	          paper: '#f2efea',
+	          gold: '#d4af37',
+	          charcoal: '#2c2c2c',
+	        },
+	      },
+	    },
+	  }
+    </script>
+    <style>
+        /* Mini Frame Previews for the Selector */
+        .preview-frame-1 { border: 8px solid #eec; outline: 1px solid #000; }
+        .preview-frame-2 { border: 8px solid #2c2c2c; outline: 1px solid #000; }
+        .preview-frame-3 { border: 8px solid #d4af37; outline: 1px solid #000; }
+        .preview-frame-4 { border: 8px solid #5a4a42; outline: 1px solid #000; }
+    </style>
+</head>
+<body class="bg-paper text-gray-800 font-sans antialiased min-h-screen">
+
+    <!-- LOGIN OVERLAY -->
+    <div id="login-overlay" class="fixed inset-0 z-50 bg-charcoal flex flex-col items-center justify-center p-4">
+        <div class="bg-white p-10 md:p-16 max-w-md w-full text-center shadow-2xl relative">
+            <div class="border-2 border-double border-gray-200 absolute inset-4 pointer-events-none"></div>
+            
+            <h1 class="font-serif text-3xl text-charcoal mb-2">Gallery Access</h1>
+            <p class="text-xs uppercase tracking-widest text-gray-500 mb-8">Curator Access Only</p>
+            
+            <form id="login-form" class="space-y-6 relative z-10">
+                <div>
+                    <input type="password" id="password-input" placeholder="Enter Passphrase" 
+                        class="w-full text-center border-b border-gray-300 py-2 text-xl font-serif focus:outline-none focus:border-gold placeholder:italic placeholder:font-serif placeholder:text-gray-300 transition-colors">
+                </div>
+                <div id="error-msg" class="text-red-500 text-xs hidden">Incorrect passphrase</div>
+                <button type="submit" class="w-full bg-charcoal text-white py-3 text-xs uppercase tracking-[0.2em] hover:bg-gold transition-colors duration-300">
+                    Enter
+                </button>
+            </form>
+            <p class="mt-6 text-[10px] text-gray-400">Hint: The password is "art"</p>
+        </div>
+    </div>
+
+    <!-- DASHBOARD -->
+    <div id="dashboard" class="hidden opacity-0 transition-opacity duration-1000 ease-in-out">
+        
+        <!-- Navbar -->
+        <nav class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center sticky top-0 z-40 shadow-sm">
+            <div class="font-serif text-xl font-bold text-charcoal">Gallery Manager</div>
+            <div class="flex gap-4 items-center">
+                <div id="save-status" class="text-xs font-bold text-gold uppercase tracking-widest opacity-0 transition-opacity">Saved</div>
+                <a href="art.html" target="_blank" class="text-xs uppercase tracking-widest text-gold hover:text-charcoal transition-colors">View Gallery ↗</a>
+                <button id="logout-btn" class="ml-4 text-xs uppercase tracking-widest text-gray-400 hover:text-red-500 transition-colors">Logout</button>
+            </div>
+        </nav>
+
+        <main class="max-w-7xl mx-auto py-12 px-6 flex flex-col md:flex-row gap-12">
+            
+            <!-- EDITOR COLUMN (Left) -->
+            <div class="w-full md:w-1/3 order-2 md:order-1">
+                <div class="bg-white p-8 shadow-sm rounded-sm sticky top-24">
+                    <h2 class="font-serif text-2xl text-charcoal mb-6 flex justify-between items-center">
+                        <span id="form-title">New Art Piece</span>
+                        <button id="reset-form" class="text-xs text-gray-400 uppercase tracking-wider hover:text-gold hidden">Cancel Edit</button>
+                    </h2>
+                    
+                    <form id="art-form" class="space-y-6">
+                        <input type="hidden" id="art-id">
+                        
+                        <!-- Title -->
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Title</label>
+                            <input type="text" id="title" required placeholder="e.g. The Quiet Morning"
+                                class="w-full bg-cream border border-gray-200 p-3 font-serif text-lg focus:outline-none focus:border-gold">
+                        </div>
+                        
+                        <!-- Image Source -->
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Image Path / URL</label>
+                            <input type="text" id="src" required placeholder="images/art/img1.png"
+                                class="w-full bg-cream border border-gray-200 p-3 text-sm focus:outline-none focus:border-gold font-mono text-gray-600">
+                             <p class="text-[10px] text-gray-400 mt-1">Use a path like 'images/art/imgX.png' or a full URL.</p>
+                        </div>
+                        
+                        <!-- Frame Selector -->
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Frame Style</label>
+                            <div class="grid grid-cols-4 gap-2">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="frame" value="frame-1" class="peer sr-only" checked>
+                                    <div class="h-12 w-full bg-gray-100 preview-frame-1 peer-checked:ring-2 peer-checked:ring-gold transition-all"></div>
+                                    <div class="text-[10px] text-center mt-1 text-gray-400">Classic</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="frame" value="frame-2" class="peer sr-only">
+                                    <div class="h-12 w-full bg-gray-100 preview-frame-2 peer-checked:ring-2 peer-checked:ring-gold transition-all"></div>
+                                    <div class="text-[10px] text-center mt-1 text-gray-400">Dark</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="frame" value="frame-3" class="peer sr-only">
+                                    <div class="h-12 w-full bg-gray-100 preview-frame-3 peer-checked:ring-2 peer-checked:ring-gold transition-all"></div>
+                                    <div class="text-[10px] text-center mt-1 text-gray-400">Gold</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="frame" value="frame-4" class="peer sr-only">
+                                    <div class="h-12 w-full bg-gray-100 preview-frame-4 peer-checked:ring-2 peer-checked:ring-gold transition-all"></div>
+                                    <div class="text-[10px] text-center mt-1 text-gray-400">Wood</div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Wall Position (Y-Offset) -->
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Wall Position (Height)</label>
+                            <select id="yOffset" class="w-full bg-cream border border-gray-200 p-3 text-sm focus:outline-none focus:border-gold">
+                                <option value="-translate-y-32">Very High</option>
+                                <option value="-translate-y-24">High</option>
+                                <option value="-translate-y-12">Mid-High</option>
+                                <option value="translate-y-0" selected>Center</option>
+                                <option value="translate-y-12">Mid-Low</option>
+                                <option value="translate-y-24">Low</option>
+                                <option value="translate-y-32">Very Low</option>
+                                <option value="translate-y-40">Lowest</option>
+                            </select>
+                        </div>
+
+                        <!-- Visibility -->
+                        <div class="flex items-center gap-3 pt-2">
+                             <input type="checkbox" id="hidden" class="w-4 h-4 accent-gold">
+                             <label for="hidden" class="text-sm text-gray-600">Hide from Gallery</label>
+                        </div>
+                        
+                        <div class="pt-4">
+                            <button type="submit" id="save-btn" class="w-full bg-charcoal text-white py-4 text-xs uppercase tracking-[0.2em] hover:bg-gold transition-colors duration-300">
+                                Save Art Piece
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- LIST COLUMN (Right) -->
+            <div class="w-full md:w-2/3 order-1 md:order-2">
+                <div class="bg-white p-8 shadow-sm rounded-sm">
+                    <h2 class="font-serif text-2xl text-charcoal mb-6">Current Collection</h2>
+                    
+                    <div id="loading-spinner" class="text-center py-10 text-gray-400 italic">Connecting to gallery...</div>
+                    <div id="art-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Items injected here -->
+                    </div>
+                    
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // --- CONSTANTS ---
+        const PASSWORD = "art";
+        
+        // DEFAULT DATA (Fallback)
+        const DEFAULT_ART = [
+            { id: 1, title: "The First Morning", src: "images/art/img17.png", frame: "frame-1", yOffset: "-translate-y-12" },
+            { id: 2, title: "Study in Blue", src: "images/art/img12.png", frame: "frame-2", yOffset: "translate-y-20" },
+            { id: 3, title: "Valley Silence", src: "images/art/img3.png", frame: "frame-3", yOffset: "-translate-y-8" },
+            { id: 4, title: "Gold Study", src: "images/art/img18.png", frame: "frame-4", yOffset: "translate-y-32" },
+            { id: 5, title: "Tall Shadows", src: "images/art/img9.png", frame: "frame-1", yOffset: "-translate-y-24" },
+            { id: 6, title: "Winter Light", src: "images/art/img14.png", frame: "frame-1", yOffset: "translate-y-12" },
+            { id: 7, title: "Small Joy", src: "images/art/img1.png", frame: "frame-3", yOffset: "translate-y-40" },
+            { id: 8, title: "Abstract Study V", src: "images/art/img19.png", frame: "frame-4", yOffset: "-translate-y-20" },
+            { id: 9, title: "Horizon Line", src: "images/art/img7.png", frame: "frame-1", yOffset: "translate-y-8" },
+            { id: 10, title: "Fragment", src: "images/art/img2.png", frame: "frame-2", yOffset: "-translate-y-32" },
+            { id: 11, title: "Evening Portrait", src: "images/art/img16.png", frame: "frame-3", yOffset: "translate-y-24" },
+            { id: 12, title: "Solitude", src: "images/art/img20.png", frame: "frame-4", yOffset: "-translate-y-20" },
+            { id: 13, title: "Coastal Dreams", src: "images/art/img8.png", frame: "frame-1", yOffset: "translate-y-16" },
+            { id: 14, title: "Golden Hour", src: "images/art/img11.png", frame: "frame-2", yOffset: "-translate-y-12" },
+            { id: 15, title: "Ascent", src: "images/art/img4.png", frame: "frame-3", yOffset: "translate-y-36" },
+            { id: 16, title: "Quiet Field", src: "images/art/img15.png", frame: "frame-4", yOffset: "-translate-y-28" },
+            { id: 17, title: "Memory", src: "images/art/img6.png", frame: "frame-1", yOffset: "translate-y-14" },
+            { id: 18, title: "The Matriarch", src: "images/art/img13.png", frame: "frame-2", yOffset: "-translate-y-8" },
+            { id: 19, title: "Wide Open", src: "images/art/img10.png", frame: "frame-3", yOffset: "translate-y-32" },
+            { id: 20, title: "The Final Chapter", src: "images/art/img5.png", frame: "frame-4", yOffset: "-translate-y-0", margin: "mr-20" }
+        ];
+
+        // --- DOM ELEMENTS ---
+        const loginOverlay = document.getElementById('login-overlay');
+        const loginForm = document.getElementById('login-form');
+        const passwordInput = document.getElementById('password-input');
+        const dashboard = document.getElementById('dashboard');
+        const errorMsg = document.getElementById('error-msg');
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        const artForm = document.getElementById('art-form');
+        const artList = document.getElementById('art-list');
+        const formTitle = document.getElementById('form-title');
+        const resetFormBtn = document.getElementById('reset-form');
+        const saveStatus = document.getElementById('save-status');
+        const loadingSpinner = document.getElementById('loading-spinner');
+        const saveBtn = document.getElementById('save-btn');
+
+        // --- STATE ---
+        let artCollection = [];
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check session
+            if (sessionStorage.getItem('rosemary_auth') === 'true') {
+                showDashboard();
+            }
+            
+            // Load Data
+            loadArt();
+        });
+
+        // --- AUTHENTICATION ---
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (passwordInput.value === PASSWORD) {
+                sessionStorage.setItem('rosemary_auth', 'true');
+                showDashboard();
+            } else {
+                errorMsg.classList.remove('hidden');
+                passwordInput.classList.add('border-red-500');
+            }
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            sessionStorage.removeItem('rosemary_auth');
+            location.reload();
+        });
+
+        function showDashboard() {
+            loginOverlay.style.display = 'none';
+            dashboard.classList.remove('hidden');
+            setTimeout(() => dashboard.classList.remove('opacity-0'), 10);
+        }
+
+        // --- API OPERATIONS ---
+        
+        async function loadArt() {
+            try {
+                const response = await fetch('/api/art');
+                if (response.ok) {
+                    const json = await response.json();
+                    if(Array.isArray(json) && json.length > 0) {
+                        artCollection = json;
+                    } else {
+                        // First run, populate with default
+                        artCollection = DEFAULT_ART;
+                        await persistArt(); // Save default to cloud
+                    }
+                } else {
+                    console.warn("API Error, loading local defaults");
+                    artCollection = DEFAULT_ART;
+                }
+            } catch (e) {
+                console.warn("Connection failed, using defaults");
+                artCollection = DEFAULT_ART;
+            } finally {
+                loadingSpinner.style.display = 'none';
+                renderList();
+            }
+        }
+
+        async function persistArt() {
+            saveBtn.textContent = "Saving...";
+            saveBtn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/art', {
+                    method: 'POST',
+                    body: JSON.stringify(artCollection),
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                if (response.ok) {
+                    showSaveStatus();
+                } else {
+                    alert("Failed to save to cloud. Check network.");
+                }
+            } catch (e) {
+                alert("Error connecting to cloud.");
+                console.error(e);
+            } finally {
+                saveBtn.textContent = "Save Art Piece";
+                saveBtn.disabled = false;
+            }
+        }
+
+        function showSaveStatus() {
+            saveStatus.classList.remove('opacity-0');
+            setTimeout(() => saveStatus.classList.add('opacity-0'), 2000);
+        }
+
+        function saveArt(artPiece) {
+            const existingIndex = artCollection.findIndex(p => p.id === artPiece.id);
+            
+            if (existingIndex >= 0) {
+                // Update
+                artCollection[existingIndex] = { ...artCollection[existingIndex], ...artPiece };
+            } else {
+                // Create
+                artCollection.push(artPiece);
+            }
+            
+            renderList();
+            persistArt();
+            resetForm();
+        }
+
+        function deleteArt(id) {
+            if(confirm('Delete this artwork? This cannot be undone.')) {
+                artCollection = artCollection.filter(p => p.id !== id);
+                renderList();
+                persistArt();
+                resetForm();
+            }
+        }
+
+        function editArt(id) {
+            const art = artCollection.find(p => p.id === id);
+            if (!art) return;
+
+            document.getElementById('art-id').value = art.id;
+            document.getElementById('title').value = art.title;
+            document.getElementById('src').value = art.src;
+            document.getElementById('yOffset').value = art.yOffset || "translate-y-0";
+            document.getElementById('hidden').checked = art.hidden || false;
+            
+            // Radio button selection
+            const radios = document.getElementsByName('frame');
+            for(const radio of radios) {
+                if(radio.value === (art.frame || 'frame-1')) {
+                    radio.checked = true;
+                }
+            }
+            
+            formTitle.textContent = "Edit Art Piece";
+            resetFormBtn.classList.remove('hidden');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            artForm.reset();
+            document.getElementById('art-id').value = '';
+            // Reset frame to 1
+            document.getElementsByName('frame')[0].checked = true;
+            document.getElementById('yOffset').value = "translate-y-0";
+            
+            formTitle.textContent = "New Art Piece";
+            resetFormBtn.classList.add('hidden');
+        }
+
+        // --- EVENT LISTENERS ---
+
+        artForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const idInput = document.getElementById('art-id').value;
+            const id = idInput ? parseInt(idInput) : Date.now();
+            
+            // Get selected frame
+            let selectedFrame = 'frame-1';
+            document.getElementsByName('frame').forEach(r => {
+                if(r.checked) selectedFrame = r.value;
+            });
+
+            const newArt = {
+                id: id,
+                title: document.getElementById('title').value,
+                src: document.getElementById('src').value,
+                frame: selectedFrame,
+                yOffset: document.getElementById('yOffset').value,
+                hidden: document.getElementById('hidden').checked
+            };
+            
+            saveArt(newArt);
+        });
+
+        resetFormBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            resetForm();
+        });
+
+        // --- RENDERING ---
+
+        function renderList() {
+            artList.innerHTML = '';
+
+            // Render items
+            artCollection.forEach(art => {
+                const item = document.createElement('div');
+                item.className = `border border-gray-100 p-4 rounded bg-white relative group ${art.hidden ? 'opacity-50' : ''}`;
+                
+                // Determine frame border color for thumbnail based on selection
+                let borderColor = '#eec';
+                if(art.frame === 'frame-2') borderColor = '#2c2c2c';
+                if(art.frame === 'frame-3') borderColor = '#d4af37';
+                if(art.frame === 'frame-4') borderColor = '#5a4a42';
+
+                item.innerHTML = `
+                    <div class="aspect-square w-full bg-gray-100 mb-3 relative overflow-hidden flex items-center justify-center">
+                        <img src="${art.src}" class="w-24 h-24 object-cover shadow-lg" style="border: 4px solid ${borderColor};" onerror="this.src='https://via.placeholder.com/150?text=Missing+Image'">
+                        ${art.hidden ? '<div class="absolute inset-0 bg-white/60 flex items-center justify-center text-xs font-bold text-gray-400 uppercase tracking-widest">Hidden</div>' : ''}
+                    </div>
+                    
+                    <h3 class="font-serif text-lg text-charcoal font-semibold truncate">${art.title}</h3>
+                    <p class="text-xs text-gray-400 font-mono mb-4 truncate">${art.src}</p>
+                    
+                    <div class="flex gap-2 justify-end mt-2">
+                        <button onclick="editArt(${art.id})" class="px-3 py-1 text-[10px] uppercase tracking-wider border border-gold text-gold hover:bg-gold hover:text-white transition-colors">Edit</button>
+                        <button onclick="deleteArt(${art.id})" class="px-3 py-1 text-[10px] uppercase tracking-wider text-gray-400 hover:text-red-500 transition-colors">Delete</button>
+                    </div>
+                `;
+                
+                artList.appendChild(item);
+            });
+        }
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio Access | Rosemary Williams</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+	  tailwind.config = {
+	    theme: {
+	      extend: {
+	        fontFamily: {
+	          sans: ['Montserrat', 'sans-serif'],
+	          serif: ['Cormorant Garamond', 'serif'],
+	        },
+	        colors: {
+	          cream: '#fcfbf9',
+	          paper: '#f2efea',
+	          gold: '#d4af37',
+	          charcoal: '#2c2c2c',
+	        },
+	      },
+	    },
+	  }
+    </script>
+</head>
+<body class="bg-paper text-gray-800 font-sans antialiased min-h-screen">
+
+    <!-- LOGIN OVERLAY -->
+    <div id="login-overlay" class="fixed inset-0 z-50 bg-charcoal flex flex-col items-center justify-center p-4">
+        <div class="bg-white p-10 md:p-16 max-w-md w-full text-center shadow-2xl relative">
+            <div class="border-2 border-double border-gray-200 absolute inset-4 pointer-events-none"></div>
+            
+            <h1 class="font-serif text-3xl text-charcoal mb-2">Studio Access</h1>
+            <p class="text-xs uppercase tracking-widest text-gray-500 mb-8">Authorised Personnel Only</p>
+            
+            <form id="login-form" class="space-y-6 relative z-10">
+                <div>
+                    <input type="password" id="password-input" placeholder="Enter Passphrase" 
+                        class="w-full text-center border-b border-gray-300 py-2 text-xl font-serif focus:outline-none focus:border-gold placeholder:italic placeholder:font-serif placeholder:text-gray-300 transition-colors">
+                </div>
+                <div id="error-msg" class="text-red-500 text-xs hidden">Incorrect passphrase</div>
+                <button type="submit" class="w-full bg-charcoal text-white py-3 text-xs uppercase tracking-[0.2em] hover:bg-gold transition-colors duration-300">
+                    Enter
+                </button>
+            </form>
+            <p class="mt-6 text-[10px] text-gray-400">Hint: The password is "art"</p>
+        </div>
+    </div>
+
+    <!-- ADMIN DASHBOARD (Hidden by default) -->
+    <div id="dashboard" class="hidden opacity-0 transition-opacity duration-1000 ease-in-out">
+        
+        <!-- Navbar -->
+        <nav class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center sticky top-0 z-40">
+            <div class="font-serif text-xl font-bold text-charcoal">Studio Manager</div>
+            <div class="flex gap-4">
+                <a href="poetry.html" target="_blank" class="text-xs uppercase tracking-widest text-gold hover:text-charcoal transition-colors">View Site ↗</a>
+                <button id="logout-btn" class="text-xs uppercase tracking-widest text-gray-400 hover:text-red-500 transition-colors">Logout</button>
+            </div>
+        </nav>
+
+        <main class="max-w-6xl mx-auto py-12 px-6 flex flex-col md:flex-row gap-12">
+            
+            <!-- EDITOR COLUMN -->
+            <div class="w-full md:w-2/3">
+                <div class="bg-white p-8 shadow-sm rounded-sm">
+                    <h2 class="font-serif text-2xl text-charcoal mb-6 flex justify-between items-center">
+                        <span id="form-title">New Poem</span>
+                        <button id="reset-form" class="text-xs text-gray-400 uppercase tracking-wider hover:text-gold hidden">Cancel Edit</button>
+                    </h2>
+                    
+                    <form id="poem-form" class="space-y-6">
+                        <input type="hidden" id="poem-id">
+                        
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Title</label>
+                            <input type="text" id="title" required
+                                class="w-full bg-cream border border-gray-200 p-3 font-serif text-xl focus:outline-none focus:border-gold">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Date</label>
+                            <input type="date" id="date" required
+                                class="w-full bg-cream border border-gray-200 p-3 focus:outline-none focus:border-gold">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Content</label>
+                            <textarea id="content" rows="12" required placeholder="Write your poetry here..."
+                                class="w-full bg-cream border border-gray-200 p-4 font-serif text-lg leading-relaxed focus:outline-none focus:border-gold"></textarea>
+                            <p class="text-[10px] text-gray-400 mt-2 text-right">Line breaks will be preserved.</p>
+                        </div>
+                        
+                        <div class="pt-4">
+                            <button type="submit" class="w-full bg-gold text-white py-4 text-xs uppercase tracking-[0.2em] hover:bg-charcoal transition-colors duration-300">
+                                Publish Poem
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- LIST COLUMN -->
+            <div class="w-full md:w-1/3">
+                <div class="bg-white p-8 shadow-sm rounded-sm sticky top-24">
+                    <h2 class="font-serif text-2xl text-charcoal mb-6">Published Works</h2>
+                    <div id="poems-list" class="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
+                        <!-- List items injected here -->
+                    </div>
+                    <div id="no-poems-msg" class="text-gray-400 italic text-sm text-center py-8">No poems yet.</div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // --- CONSTANTS ---
+        const PASSWORD = "art";
+        const STORAGE_KEY = "rosemary_poetry_data";
+
+        // --- DOM ELEMENTS ---
+        const loginOverlay = document.getElementById('login-overlay');
+        const loginForm = document.getElementById('login-form');
+        const passwordInput = document.getElementById('password-input');
+        const dashboard = document.getElementById('dashboard');
+        const errorMsg = document.getElementById('error-msg');
+        const logoutBtn = document.getElementById('logout-btn');
+        
+        const poemForm = document.getElementById('poem-form');
+        const poemsList = document.getElementById('poems-list');
+        const noPoemsMsg = document.getElementById('no-poems-msg');
+        const formTitle = document.getElementById('form-title');
+        const resetFormBtn = document.getElementById('reset-form');
+
+        // --- STATE ---
+        let poems = [];
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check session
+            if (sessionStorage.getItem('rosemary_auth') === 'true') {
+                showDashboard();
+            }
+            
+            // Set default date to today
+            document.getElementById('date').valueAsDate = new Date();
+            
+            // Load Data
+            loadPoems();
+        });
+
+        // --- AUTHENTICATION ---
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (passwordInput.value === PASSWORD) {
+                sessionStorage.setItem('rosemary_auth', 'true');
+                showDashboard();
+            } else {
+                errorMsg.classList.remove('hidden');
+                passwordInput.classList.add('border-red-500');
+            }
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            sessionStorage.removeItem('rosemary_auth');
+            location.reload();
+        });
+
+        function showDashboard() {
+            loginOverlay.style.display = 'none';
+            dashboard.classList.remove('hidden');
+            // Trigger reflow
+            void dashboard.offsetWidth; 
+            dashboard.classList.remove('opacity-0');
+        }
+
+        // --- CRUD OPERATIONS ---
+        
+        function loadPoems() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            poems = data ? JSON.parse(data) : [];
+            renderList();
+        }
+
+        function savePoem(poem) {
+            const existingIndex = poems.findIndex(p => p.id === poem.id);
+            
+            if (existingIndex >= 0) {
+                poems[existingIndex] = poem;
+            } else {
+                poems.push(poem);
+            }
+            
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(poems));
+            loadPoems();
+            resetForm();
+        }
+
+        function deletePoem(id) {
+            if(confirm('Are you sure you want to delete this poem?')) {
+                poems = poems.filter(p => p.id !== id);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(poems));
+                loadPoems();
+                resetForm();
+            }
+        }
+
+        function editPoem(id) {
+            const poem = poems.find(p => p.id === id);
+            if (!poem) return;
+
+            document.getElementById('poem-id').value = poem.id;
+            document.getElementById('title').value = poem.title;
+            document.getElementById('date').value = poem.date;
+            document.getElementById('content').value = poem.content;
+            
+            formTitle.textContent = "Edit Poem";
+            resetFormBtn.classList.remove('hidden');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            poemForm.reset();
+            document.getElementById('poem-id').value = '';
+            document.getElementById('date').valueAsDate = new Date();
+            formTitle.textContent = "New Poem";
+            resetFormBtn.classList.add('hidden');
+        }
+
+        // --- EVENT LISTENERS ---
+
+        poemForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const idInput = document.getElementById('poem-id').value;
+            const id = idInput ? parseInt(idInput) : Date.now();
+            
+            const newPoem = {
+                id: id,
+                title: document.getElementById('title').value,
+                date: document.getElementById('date').value,
+                content: document.getElementById('content').value
+            };
+            
+            savePoem(newPoem);
+            alert('Poem Saved Successfully');
+        });
+
+        resetFormBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            resetForm();
+        });
+
+        // --- RENDERING ---
+
+        function renderList() {
+            poemsList.innerHTML = '';
+            
+            if (poems.length === 0) {
+                noPoemsMsg.style.display = 'block';
+                return;
+            }
+            
+            noPoemsMsg.style.display = 'none';
+
+            // Sort by date desc
+            const sortedPoems = [...poems].sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            sortedPoems.forEach(poem => {
+                const item = document.createElement('div');
+                item.className = 'border-b border-gray-100 pb-4 last:border-0';
+                
+                item.innerHTML = `
+                    <div class="flex justify-between items-start mb-1">
+                        <h3 class="font-serif text-lg text-charcoal font-semibold">${poem.title}</h3>
+                        <div class="flex gap-2">
+                            <button onclick="editPoem(${poem.id})" class="text-gold hover:text-charcoal transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                            </button>
+                            <button onclick="deletePoem(${poem.id})" class="text-gray-300 hover:text-red-500 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="text-xs uppercase tracking-wider text-gray-400 mb-2">${poem.date}</div>
+                    <p class="text-sm text-gray-500 line-clamp-2 font-serif italic">${poem.content}</p>
+                `;
+                
+                poemsList.appendChild(item);
+            });
+        }
+
+    </script>
+</body>
+</html>
