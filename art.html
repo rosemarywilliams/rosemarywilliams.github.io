@@ -191,6 +191,10 @@
     </main>
 
 	<script>
+        // --- API CONFIGURATION ---
+        // IMPORTANT: If this URL is incorrect, update it with your Cloudflare Worker URL.
+        const API_URL = "https://gallery-api.rosemarywilliams.workers.dev/api/art";
+
 	    const scrollContainer = document.querySelector('main');
 	
 	    scrollContainer.addEventListener('wheel', (evt) => {
@@ -230,8 +234,8 @@
             
             // Try to fetch from Cloudflare Worker
             try {
-                // Use a relative path so it works on any domain (assuming route is configured)
-                const response = await fetch('https://gallery-api.rt3williams.workers.dev');
+                // We use the absolute URL to bypass GitHub's routing
+                const response = await fetch(API_URL);
                 if (response.ok) {
                     const json = await response.json();
                     if (Array.isArray(json) && json.length > 0) {
@@ -239,7 +243,7 @@
                     }
                 }
             } catch (err) {
-                console.log("Using default collection (API unavailable or empty)");
+                console.log("Using default collection (API unavailable or empty):", err);
             }
 
             // Fallback
