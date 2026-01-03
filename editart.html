@@ -40,8 +40,9 @@
 </head>
 <body class="bg-paper text-gray-800 font-sans antialiased min-h-screen">
 
+
     <!-- DASHBOARD -->
-    <div id="dashboard" class="opacity-0 transition-opacity duration-1000 ease-in-out">
+    <div id="dashboard" class="transition-opacity duration-1000 ease-in-out">
         
         <!-- Navbar -->
         <nav class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center sticky top-0 z-40 shadow-sm">
@@ -158,9 +159,6 @@
         // --- API CONFIGURATION ---
         // IMPORTANT: If this URL is incorrect, update it with your Cloudflare Worker URL.
         const API_URL = "/api/art";
-
-        // --- CONSTANTS ---
-        const PASSWORD = "art";
         
         // DEFAULT DATA (Fallback)
         const DEFAULT_ART = [
@@ -207,11 +205,6 @@
 
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Check session
-            if (sessionStorage.getItem('rosemary_auth') === 'true') {
-                showDashboard();
-            }
-            
             // Load Data
             loadArt();
         });
