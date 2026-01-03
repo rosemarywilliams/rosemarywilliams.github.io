@@ -40,30 +40,8 @@
 </head>
 <body class="bg-paper text-gray-800 font-sans antialiased min-h-screen">
 
-    <!-- LOGIN OVERLAY -->
-    <div id="login-overlay" class="fixed inset-0 z-50 bg-charcoal flex flex-col items-center justify-center p-4">
-        <div class="bg-white p-10 md:p-16 max-w-md w-full text-center shadow-2xl relative">
-            <div class="border-2 border-double border-gray-200 absolute inset-4 pointer-events-none"></div>
-            
-            <h1 class="font-serif text-3xl text-charcoal mb-2">Gallery Access</h1>
-            <p class="text-xs uppercase tracking-widest text-gray-500 mb-8">Curator Access Only</p>
-            
-            <form id="login-form" class="space-y-6 relative z-10">
-                <div>
-                    <input type="password" id="password-input" placeholder="Enter Passphrase" 
-                        class="w-full text-center border-b border-gray-300 py-2 text-xl font-serif focus:outline-none focus:border-gold placeholder:italic placeholder:font-serif placeholder:text-gray-300 transition-colors">
-                </div>
-                <div id="error-msg" class="text-red-500 text-xs hidden">Incorrect passphrase</div>
-                <button type="submit" class="w-full bg-charcoal text-white py-3 text-xs uppercase tracking-[0.2em] hover:bg-gold transition-colors duration-300">
-                    Enter
-                </button>
-            </form>
-            <p class="mt-6 text-[10px] text-gray-400">Hint: The password is "art"</p>
-        </div>
-    </div>
-
     <!-- DASHBOARD -->
-    <div id="dashboard" class="hidden opacity-0 transition-opacity duration-1000 ease-in-out">
+    <div id="dashboard" class="transition-opacity duration-1000 ease-in-out">
         
         <!-- Navbar -->
         <nav class="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center sticky top-0 z-40 shadow-sm">
@@ -71,7 +49,6 @@
             <div class="flex gap-4 items-center">
                 <div id="save-status" class="text-xs font-bold text-gold uppercase tracking-widest opacity-0 transition-opacity">Saved</div>
                 <a href="art.html" target="_blank" class="text-xs uppercase tracking-widest text-gold hover:text-charcoal transition-colors">View Gallery ↗</a>
-                <button id="logout-btn" class="ml-4 text-xs uppercase tracking-widest text-gray-400 hover:text-red-500 transition-colors">Logout</button>
             </div>
         </nav>
 
@@ -95,12 +72,22 @@
                                 class="w-full bg-cream border border-gray-200 p-3 font-serif text-lg focus:outline-none focus:border-gold">
                         </div>
                         
-                        <!-- Image Source -->
+                        <!-- Image Upload -->
                         <div>
-                            <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Image Path / URL</label>
-                            <input type="text" id="src" required placeholder="images/art/img1.png"
-                                class="w-full bg-cream border border-gray-200 p-3 text-sm focus:outline-none focus:border-gold font-mono text-gray-600">
-                             <p class="text-[10px] text-gray-400 mt-1">Use a path like 'images/art/imgX.png' or a full URL.</p>
+                            <label class="block text-xs uppercase tracking-widest text-gray-500 mb-2">Artwork Image</label>
+                            
+                            <!-- Hidden input to store the actual Base64 string or URL -->
+                            <input type="hidden" id="src">
+                            
+                            <div class="border-2 border-dashed border-gray-300 p-6 text-center cursor-pointer hover:bg-cream transition-colors relative" id="drop-zone">
+                                <input type="file" id="image-upload" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                <div id="upload-placeholder">
+                                    <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                    <span class="text-xs text-gray-500 uppercase tracking-widest block">Upload Image</span>
+                                </div>
+                                <img id="preview-image" class="max-h-48 mx-auto hidden shadow-md" />
+                            </div>
+                             <p class="text-[10px] text-gray-400 mt-2">Click to upload from computer.</p>
                         </div>
                         
                         <!-- Frame Selector -->
@@ -165,7 +152,7 @@
                 <div class="bg-white p-8 shadow-sm rounded-sm">
                     <h2 class="font-serif text-2xl text-charcoal mb-6">Current Collection</h2>
                     
-                    <div id="loading-spinner" class="text-center py-10 text-gray-400 italic">Connecting to gallery...</div>
+                    <div id="loading-spinner" class="text-center py-10 text-gray-400 italic">Loading gallery...</div>
                     <div id="art-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <!-- Items injected here -->
                     </div>
@@ -178,11 +165,8 @@
 
     <script>
         // --- API CONFIGURATION ---
-        // IMPORTANT: If this URL is incorrect, update it with your Cloudflare Worker URL.
         const API_URL = "/api/art";
-
-        // --- CONSTANTS ---
-        const PASSWORD = "art";
+        const LOCAL_STORAGE_KEY = "rosemary_art_data";
         
         // DEFAULT DATA (Fallback)
         const DEFAULT_ART = [
@@ -193,29 +177,10 @@
             { id: 5, title: "Tall Shadows", src: "images/art/img9.png", frame: "frame-1", yOffset: "-translate-y-24" },
             { id: 6, title: "Winter Light", src: "images/art/img14.png", frame: "frame-1", yOffset: "translate-y-12" },
             { id: 7, title: "Small Joy", src: "images/art/img1.png", frame: "frame-3", yOffset: "translate-y-40" },
-            { id: 8, title: "Abstract Study V", src: "images/art/img19.png", frame: "frame-4", yOffset: "-translate-y-20" },
-            { id: 9, title: "Horizon Line", src: "images/art/img7.png", frame: "frame-1", yOffset: "translate-y-8" },
-            { id: 10, title: "Fragment", src: "images/art/img2.png", frame: "frame-2", yOffset: "-translate-y-32" },
-            { id: 11, title: "Evening Portrait", src: "images/art/img16.png", frame: "frame-3", yOffset: "translate-y-24" },
-            { id: 12, title: "Solitude", src: "images/art/img20.png", frame: "frame-4", yOffset: "-translate-y-20" },
-            { id: 13, title: "Coastal Dreams", src: "images/art/img8.png", frame: "frame-1", yOffset: "translate-y-16" },
-            { id: 14, title: "Golden Hour", src: "images/art/img11.png", frame: "frame-2", yOffset: "-translate-y-12" },
-            { id: 15, title: "Ascent", src: "images/art/img4.png", frame: "frame-3", yOffset: "translate-y-36" },
-            { id: 16, title: "Quiet Field", src: "images/art/img15.png", frame: "frame-4", yOffset: "-translate-y-28" },
-            { id: 17, title: "Memory", src: "images/art/img6.png", frame: "frame-1", yOffset: "translate-y-14" },
-            { id: 18, title: "The Matriarch", src: "images/art/img13.png", frame: "frame-2", yOffset: "-translate-y-8" },
-            { id: 19, title: "Wide Open", src: "images/art/img10.png", frame: "frame-3", yOffset: "translate-y-32" },
-            { id: 20, title: "The Final Chapter", src: "images/art/img5.png", frame: "frame-4", yOffset: "-translate-y-0", margin: "mr-20" }
+            { id: 8, title: "Abstract Study V", src: "images/art/img19.png", frame: "frame-4", yOffset: "-translate-y-20" }
         ];
 
         // --- DOM ELEMENTS ---
-        const loginOverlay = document.getElementById('login-overlay');
-        const loginForm = document.getElementById('login-form');
-        const passwordInput = document.getElementById('password-input');
-        const dashboard = document.getElementById('dashboard');
-        const errorMsg = document.getElementById('error-msg');
-        const logoutBtn = document.getElementById('logout-btn');
-        
         const artForm = document.getElementById('art-form');
         const artList = document.getElementById('art-list');
         const formTitle = document.getElementById('form-title');
@@ -223,66 +188,80 @@
         const saveStatus = document.getElementById('save-status');
         const loadingSpinner = document.getElementById('loading-spinner');
         const saveBtn = document.getElementById('save-btn');
+        
+        // Image Upload Elements
+        const imageUpload = document.getElementById('image-upload');
+        const srcInput = document.getElementById('src');
+        const previewImage = document.getElementById('preview-image');
+        const uploadPlaceholder = document.getElementById('upload-placeholder');
 
         // --- STATE ---
         let artCollection = [];
+        let useLocalStorage = false; // Will flip to true if API fails
 
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
-            // Check session
-            if (sessionStorage.getItem('rosemary_auth') === 'true') {
-                showDashboard();
-            }
-            
-            // Load Data
             loadArt();
         });
 
-        // --- AUTHENTICATION ---
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            if (passwordInput.value === PASSWORD) {
-                sessionStorage.setItem('rosemary_auth', 'true');
-                showDashboard();
-            } else {
-                errorMsg.classList.remove('hidden');
-                passwordInput.classList.add('border-red-500');
+        // --- IMAGE HANDLING ---
+        imageUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    const result = evt.target.result;
+                    srcInput.value = result; // Store Base64 string
+                    
+                    // Update UI
+                    previewImage.src = result;
+                    previewImage.classList.remove('hidden');
+                    uploadPlaceholder.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
             }
         });
 
-        logoutBtn.addEventListener('click', () => {
-            sessionStorage.removeItem('rosemary_auth');
-            location.reload();
-        });
-
-        function showDashboard() {
-            loginOverlay.style.display = 'none';
-            dashboard.classList.remove('hidden');
-            setTimeout(() => dashboard.classList.remove('opacity-0'), 10);
+        function resetImagePreview() {
+            imageUpload.value = '';
+            previewImage.src = '';
+            previewImage.classList.add('hidden');
+            uploadPlaceholder.classList.remove('hidden');
         }
 
-        // --- API OPERATIONS ---
+        // --- API / STORAGE OPERATIONS ---
         
         async function loadArt() {
             try {
-                // We use the absolute URL to bypass GitHub's routing
-                const response = await fetch(API_URL);
-                if (response.ok) {
-                    const json = await response.json();
-                    if(Array.isArray(json) && json.length > 0) {
-                        artCollection = json;
-                    } else {
-                        // First run, populate with default
-                        artCollection = DEFAULT_ART;
-                        await persistArt(); // Save default to cloud
-                    }
+                // Try Local Storage First (Prioritize local changes if API isn't working perfectly or if user is local)
+                const localData = localStorage.getItem(LOCAL_STORAGE_KEY);
+                
+                if (localData) {
+                    artCollection = JSON.parse(localData);
+                    useLocalStorage = true;
                 } else {
-                    console.warn("API Error, loading local defaults");
-                    artCollection = DEFAULT_ART;
+                    // Try Fetching from Cloudflare
+                    try {
+                        const response = await fetch(API_URL);
+                        if (response.ok) {
+                            const json = await response.json();
+                            if(Array.isArray(json) && json.length > 0) {
+                                artCollection = json;
+                            } else {
+                                artCollection = DEFAULT_ART;
+                            }
+                        } else {
+                            throw new Error("API not okay");
+                        }
+                    } catch (apiErr) {
+                        console.log("API unavailable, defaulting to basic set.");
+                        artCollection = DEFAULT_ART;
+                        useLocalStorage = true;
+                    }
                 }
             } catch (e) {
-                console.warn("Connection failed, using defaults:", e);
                 artCollection = DEFAULT_ART;
+                useLocalStorage = true;
             } finally {
                 loadingSpinner.style.display = 'none';
                 renderList();
@@ -293,26 +272,40 @@
             saveBtn.textContent = "Saving...";
             saveBtn.disabled = true;
             
+            // 1. Save to Local Storage (Always do this as backup/speed)
             try {
-                // We use the absolute URL to bypass GitHub's routing
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    body: JSON.stringify(artCollection),
-                    headers: { 'Content-Type': 'application/json' }
-                });
-                
-                if (response.ok) {
-                    showSaveStatus();
-                } else {
-                    alert("Failed to save to cloud. Check network.");
-                }
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(artCollection));
             } catch (e) {
-                alert("Error connecting to cloud.");
-                console.error(e);
-            } finally {
-                saveBtn.textContent = "Save Art Piece";
-                saveBtn.disabled = false;
+                if (e.name === 'QuotaExceededError') {
+                    alert("Storage limit exceeded! Try uploading smaller images.");
+                    saveBtn.textContent = "Save Art Piece";
+                    saveBtn.disabled = false;
+                    return;
+                }
             }
+
+            // 2. Try Save to API if we haven't determined we are local-only
+            if (!useLocalStorage) {
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        body: JSON.stringify(artCollection),
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    
+                    if (!response.ok) {
+                        console.warn("Could not save to Cloud. Saved locally only.");
+                        useLocalStorage = true; // Fallback for future
+                    }
+                } catch (e) {
+                    console.warn("Could not save to Cloud. Saved locally only.");
+                    useLocalStorage = true;
+                }
+            }
+            
+            showSaveStatus();
+            saveBtn.textContent = "Save Art Piece";
+            saveBtn.disabled = false;
         }
 
         function showSaveStatus() {
@@ -351,10 +344,19 @@
 
             document.getElementById('art-id').value = art.id;
             document.getElementById('title').value = art.title;
-            document.getElementById('src').value = art.src;
+            document.getElementById('src').value = art.src; // Keep original src
             document.getElementById('yOffset').value = art.yOffset || "translate-y-0";
             document.getElementById('hidden').checked = art.hidden || false;
             
+            // Handle Image Preview
+            if (art.src) {
+                previewImage.src = art.src;
+                previewImage.classList.remove('hidden');
+                uploadPlaceholder.classList.add('hidden');
+            } else {
+                resetImagePreview();
+            }
+
             // Radio button selection
             const radios = document.getElementsByName('frame');
             for(const radio of radios) {
@@ -373,6 +375,9 @@
         function resetForm() {
             artForm.reset();
             document.getElementById('art-id').value = '';
+            document.getElementById('src').value = '';
+            resetImagePreview();
+            
             // Reset frame to 1
             document.getElementsByName('frame')[0].checked = true;
             document.getElementById('yOffset').value = "translate-y-0";
@@ -398,11 +403,16 @@
             const newArt = {
                 id: id,
                 title: document.getElementById('title').value,
-                src: document.getElementById('src').value,
+                src: document.getElementById('src').value, // This comes from file reader or previous value
                 frame: selectedFrame,
                 yOffset: document.getElementById('yOffset').value,
                 hidden: document.getElementById('hidden').checked
             };
+            
+            if (!newArt.src) {
+                alert("Please upload an image.");
+                return;
+            }
             
             saveArt(newArt);
         });
@@ -430,12 +440,11 @@
 
                 item.innerHTML = `
                     <div class="aspect-square w-full bg-gray-100 mb-3 relative overflow-hidden flex items-center justify-center">
-                        <img src="${art.src}" class="w-24 h-24 object-cover shadow-lg" style="border: 4px solid ${borderColor};" onerror="this.src='https://via.placeholder.com/150?text=Missing+Image'">
+                        <img src="${art.src}" class="w-24 h-24 object-cover shadow-lg" style="border: 4px solid ${borderColor};" onerror="this.src='https://via.placeholder.com/150?text=Error'">
                         ${art.hidden ? '<div class="absolute inset-0 bg-white/60 flex items-center justify-center text-xs font-bold text-gray-400 uppercase tracking-widest">Hidden</div>' : ''}
                     </div>
                     
                     <h3 class="font-serif text-lg text-charcoal font-semibold truncate">${art.title}</h3>
-                    <p class="text-xs text-gray-400 font-mono mb-4 truncate">${art.src}</p>
                     
                     <div class="flex gap-2 justify-end mt-2">
                         <button onclick="editArt(${art.id})" class="px-3 py-1 text-[10px] uppercase tracking-wider border border-gold text-gold hover:bg-gold hover:text-white transition-colors">Edit</button>
