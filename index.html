@@ -3,252 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rosemary Williams</title>
-    
-    <!-- Google Fonts -->
+    <meta name="description" content="Original art and poetry by Rosemary Williams. Explore the gallery, read recent poems, and inquire about commissions.">
+    <title>Rosemary Williams | Art and Poetry</title>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-
-    <!-- Tailwind CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Tailwind Configuration -->
     <script>
-	  tailwind.config = {
-	    theme: {
-	      extend: {
-	        fontFamily: {
-	          sans: ['Montserrat', 'sans-serif'],
-	          serif: ['Cormorant Garamond', 'serif'],
-	        },
-	        colors: {
-	          cream: '#fcfbf9',
-	          paper: '#f2efea',
-	          gold: '#d4af37',
-	          charcoal: '#2c2c2c',
-	        },
-            boxShadow: {
-                'frame': '0 10px 30px -5px rgba(0, 0, 0, 0.5)',
-                'inner-mat': 'inset 0 0 20px rgba(0,0,0,0.2)',
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Montserrat", "sans-serif"],
+              serif: ["Cormorant Garamond", "serif"],
             },
-	        // We define the values here so the plugin can read them
-	        textShadow: {
-	          'default': '0 2px 4px rgba(0, 0, 0, 0.1)',
-	          'md': '0 3px 6px rgba(0, 0, 0, 0.2)',
-	          'lg': '0 4px 8px rgba(0, 0, 0, 0.3)',
-	          'charcoal': '1px 3px 4px rgba(44, 44, 44, 1)',
-	        }
-	      },
-	    },
-	    // Plugins must be at the root level of the config object
-	    plugins: [
-	      function({ addUtilities, theme }) {
-	        const shadows = theme('textShadow');
-	        const utilities = Object.entries(shadows).map(([key, value]) => ({
-	          [`.text-shadow-${key}`]: { textShadow: value },
-	        }));
-	        addUtilities(utilities);
-	      }
-	    ]
-	  }
+            colors: {
+              cream: "#fcfbf9",
+              paper: "#f2efea",
+              gold: "#d4af37",
+              charcoal: "#2c2c2c",
+              ink: "#171717",
+            },
+            boxShadow: {
+              frame: "0 18px 45px -20px rgba(0, 0, 0, 0.55)",
+            },
+          },
+        },
+      };
     </script>
-
-    
-    <style>
-    @keyframes jump {
-	  0% { transform: translateY(0); } /* Start position */
-	  10% { transform: translateY(-20px); } /* Peak of the jump */
-	  20% { transform: translateY(3px); } /* Return to start */
-	  25% { transform: translateY(0); }
-	}
-	
-	.jump-element {
-	  animation: jump 3s ease-in-out infinite; /* Apply the animation */
-	}
-    </style>
+    <link rel="stylesheet" href="site.css">
 </head>
-<body class="bg-cream text-gray-800 font-sans antialiased">
+<body class="bg-cream text-charcoal font-sans antialiased">
+    <a href="#main-content" class="skip-link">Skip to content</a>
 
-    <!-- NAVIGATION -->
-    <nav class="mt-3 absolute top-0 left-1/2 -translate-x-1/2 w-[70vw] p-1 md:px-16 flex justify-between items-center z-20 h-[60px] pl-3 pr-3 rounded-md bg-white/50">
-        <a href="index.html" class="font-serif text-5xl md:text-3xl font-semibold text-charcoal tracking-wide">
-            Rosemary Williams
-        </a>
-        <div class="hidden md:flex gap-8">
-      	  <a href="index.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">Home</a>
-            <a href="art.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">Art</a>
-            <a href="poetry.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">Poetry</a>
-            <a href="commissions.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">Commissions</a>
-            <a href="about.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">About</a>
-            <a href="contact.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">Contact</a>
+    <nav class="fixed top-0 left-0 right-0 z-40 border-b border-white/20 bg-cream/90 backdrop-blur-md">
+        <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:px-8">
+            <a href="index.html" class="focus-ring font-serif text-2xl font-semibold tracking-wide text-charcoal md:text-3xl">Rosemary Williams</a>
+            <div class="hidden items-center gap-7 md:flex">
+                <a href="index.html" class="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal">Home</a>
+                <a href="art.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Art</a>
+                <a href="poetry.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Poetry</a>
+                <a href="commissions.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Commissions</a>
+                <a href="about.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">About</a>
+                <a href="contact.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Contact</a>
+            </div>
+            <button type="button" class="focus-ring md:hidden rounded-sm border border-charcoal/15 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em]" aria-controls="mobile-menu" aria-expanded="false" data-menu-button>Menu</button>
         </div>
-        <!-- Mobile Menu Icon Placeholder -->
-        <button class="md:hidden text-charcoal hover:text-charcoal/60 text-2xl">☰</button>
+        <div id="mobile-menu" class="mobile-menu border-t border-charcoal/10 bg-cream px-5 py-4 md:hidden">
+            <a href="index.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Home</a>
+            <a href="art.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Art</a>
+            <a href="poetry.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Poetry</a>
+            <a href="commissions.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Commissions</a>
+            <a href="about.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">About</a>
+            <a href="contact.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Contact</a>
+        </div>
     </nav>
-    
 
-    <!-- HERO SECTION -->
-    <header class="relative h-screen w-full flex flex-col justify-center items-center text-center px-4">
-        <!-- Background Image -->
-        <div class="absolute inset-0 z-0">
-            <img 
-                src="images/primarybgs/heroimg.png"
-                class="w-full h-full object-cover"
-            >
-        </div>
-        
-	    <div class="relative z-10 pt-20 mb-auto">
-	        <a class="font-serif text-xl md:text-xl lg:text-2xl font-semibold text-white text-shadow-charcoal">
-	            Art and Poetry by Rosemary Williams
-	        </a>
-	    </div>
-        
-                <!-- COMMENT OUT
-        <div class="relative text-white mb-10">
-        	<div class="rounded-md">
-	            <a href="#gallery" class="m-5 rounded-md inline-block px-10 py-4 border border-white text-xs uppercase tracking-[0.2em] bg-white/80 hover:bg-white/50 text-charcoal transition-all duration-300">
-	                Explore Art
-	            </a>
-	            <a href="#poetry" class="m-5 rounded-md inline-block px-10 py-4 border border-white text-xs uppercase tracking-[0.2em] bg-white/80 hover:bg-white/50 text-charcoal transition-all duration-300">
-	                Read Poetry
-	            </a>
+    <header class="relative min-h-[92vh] overflow-hidden pt-16">
+        <img src="images/primarybgs/heroimg.png" alt="Painting detail from Rosemary Williams' studio" class="absolute inset-0 h-full w-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/45 via-black/15 to-cream"></div>
+        <div class="relative z-10 mx-auto flex min-h-[calc(92vh-4rem)] max-w-7xl flex-col justify-end px-5 pb-16 md:px-8 md:pb-20">
+            <div class="max-w-3xl text-white">
+                <p class="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-white/80">Art and poetry</p>
+                <h1 class="font-serif text-6xl font-semibold leading-none md:text-8xl">Rosemary Williams</h1>
+                <p class="mt-6 max-w-2xl text-lg font-light leading-8 text-white/90 md:text-xl">Original paintings and poems shaped by landscape, memory, weather, and quiet observation.</p>
+                <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                    <a href="art.html" class="focus-ring inline-flex items-center justify-center bg-white px-7 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-charcoal transition hover:bg-gold hover:text-white">Explore Art</a>
+                    <a href="poetry.html" class="focus-ring inline-flex items-center justify-center border border-white/70 px-7 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-white hover:text-charcoal">Read Poetry</a>
+                </div>
             </div>
         </div>
-                -->
-
-        <div class="jump-element absolute text-white bottom-0 pb-12">
-			<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down-icon lucide-chevron-down"><path d="m6 9 6 6 6-6"/></svg>
-        </div>
-        <div class="absolute bottom-0 translate-y-1/2 w-full h-[20px] bg-white rounded-full blur-md"></div>
-
     </header>
 
-    <!-- INTRO SECTION
-    <section id="about" class="py-24 px-6 md:px-12 max-w-5xl mx-auto text-center">
-        <h2 class="font-serif text-4xl md:text-5xl text-charcoal mb-8 font-semibold">Welcome to my Studio</h2>
-        <p class="text-xl text-gray-600 mb-10 leading-relaxed font-light">
-            I believe that every face holds a history and every landscape whispers a secret. 
-            For over twenty years, I have been capturing these moments in oil and acrylic.
-            What started as a childhood fascination with light filtering through oak leaves has evolved into a lifelong dedication to the canvas.
-            Here, you will find my visual work alongside my daily practice of poetry—two expressions of the same heart.
-        </p>
-    </section>
-     -->
-
-	<div class="flex items-center justify-center w-full bg-white">
-        <a class="font-serif text-xl text-center font-semibold text-charcoal/90 border-b border-transparent group-hover:border-white transition-all duration-300 p-8">"The reason I think that artists can do almost anything with clouds, given a few rules are followed, is that there’s always something so much more spectacular in the sky"</a>
-	</div>
-
-    <!-- FEATURED WORK / GRID SECTION -->
-    <section id="gallery" class="w-full py-16 bg-paper">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-6 md:px-12 max-w-[1600px] mx-auto">
-            <!-- Item 1 -->
-            <a href="#" class="group relative h-[500px] overflow-hidden block rounded-lg shadow-lg">
-                <img src="images/art/img2.png" alt="Portrait" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                <div class="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-300"></div>
-                <div class="absolute inset-0 flex items-center justify-center">
-                    <span class="font-serif text-3xl md:text-4xl italic text-white border-b border-transparent group-hover:border-white transition-all duration-300 pb-1">Read Poetry</span>
+    <main id="main-content">
+        <section class="bg-cream px-5 py-16 md:px-8">
+            <div class="mx-auto grid max-w-7xl gap-10 md:grid-cols-[0.9fr_1.1fr] md:items-end">
+                <div class="soft-reveal">
+                    <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold">Studio practice</p>
+                    <h2 class="mt-4 font-serif text-4xl font-semibold leading-tight text-charcoal md:text-6xl">A practice of looking closely.</h2>
                 </div>
-            </a>
-            <!-- Item 2 -->
-            <a href="#" class="group relative h-[500px] overflow-hidden block rounded-lg shadow-lg">
-                <img src="images/art/img3.png" alt="Nature" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                <div class="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-300"></div>
-                <div class="absolute inset-0 flex items-center justify-center">
-                    <span class="font-serif text-3xl md:text-4xl italic text-white border-b border-transparent group-hover:border-white transition-all duration-300 pb-1">Commission A Piece</span>
-                </div>
-            </a>
-            <!-- Item 3 -->
-            <a href="art.html" class="group relative h-[500px] overflow-hidden block rounded-lg shadow-lg">
-                <img src="images/art/img4.png" alt="Stories" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                <div class="absolute inset-0 bg-black/30 group-hover:bg-black/20 transition-colors duration-300"></div>
-                <div class="absolute inset-0 flex items-center justify-center">
-                    <span class="font-serif text-3xl md:text-4xl italic text-white border-b border-transparent group-hover:border-white transition-all duration-300 pb-1">Explore Art</span>
-                </div>
-            </a>
-        </div>
-    </section>
-
-    <!--
-    <section id="services" class="py-24 px-6 md:px-12 bg-white">
-        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
-            <div class="w-full md:w-1/2 h-[500px]">
-                <img src="https://images.unsplash.com/photo-1605806616949-1e87b487bc2a?q=80&w=2574&auto=format&fit=crop" alt="Artist Studio" class="w-full h-full object-cover shadow-lg">
+                <p class="soft-reveal text-lg font-light leading-8 text-charcoal/70">Rosemary's work brings painting and poetry into the same room: image, language, weather, and feeling held long enough to reveal their shape.</p>
             </div>
-            <div class="w-full md:w-1/2 text-left">
-                <h3 class="font-serif text-xs uppercase tracking-[0.2em] text-gold mb-4">Services</h3>
-                <h2 class="font-serif text-4xl md:text-5xl text-charcoal mb-6">Commission a Piece</h2>
-                <p class="text-gray-600 mb-8 font-light leading-relaxed">
-                    Whether it is a portrait of a loved one, a beloved pet, or a landscape that holds special meaning to you, I work closely with clients to bring their vision to life.
-                </p>
-                <ul class="space-y-4 mb-10">
-                    <li class="flex items-center gap-4">
-                        <span class="w-2 h-2 rounded-full bg-gold"></span>
-                        <span class="font-serif text-xl italic text-gray-800">Custom Oil Portraits</span>
-                    </li>
-                    <li class="flex items-center gap-4">
-                        <span class="w-2 h-2 rounded-full bg-gold"></span>
-                        <span class="font-serif text-xl italic text-gray-800">Landscape Commissions</span>
-                    </li>
-                    <li class="flex items-center gap-4">
-                        <span class="w-2 h-2 rounded-full bg-gold"></span>
-                        <span class="font-serif text-xl italic text-gray-800">Private Workshops</span>
-                    </li>
-                </ul>
-                <a href="#contact" class="inline-block px-8 py-3 bg-charcoal text-white text-xs uppercase tracking-[0.2em] hover:bg-gold transition-colors duration-300">
-                    Inquire Now
-                </a>
+        </section>
+
+        <section class="bg-paper px-5 py-16 md:px-8">
+            <div class="mx-auto max-w-7xl">
+                <div class="mb-9 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+                    <div>
+                        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold">Featured paths</p>
+                        <h2 class="mt-3 font-serif text-4xl font-semibold text-charcoal md:text-5xl">Enter the work</h2>
+                    </div>
+                    <a href="contact.html" class="focus-ring text-sm font-semibold uppercase tracking-[0.18em] text-charcoal underline decoration-gold underline-offset-8">Start a conversation</a>
+                </div>
+
+                <div class="grid gap-5 md:grid-cols-3">
+                    <a href="art.html" class="art-card focus-ring group relative min-h-[430px] overflow-hidden bg-charcoal shadow-frame">
+                        <img src="images/art/img17.png" alt="Framed artwork from the Rosemary Williams gallery" class="absolute inset-0 h-full w-full object-cover">
+                        <div class="absolute inset-0 bg-black/35 transition group-hover:bg-black/20"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-7 text-white">
+                            <p class="text-xs uppercase tracking-[0.22em] text-white/75">Gallery</p>
+                            <h3 class="mt-3 font-serif text-4xl italic">Explore Art</h3>
+                        </div>
+                    </a>
+                    <a href="poetry.html" class="art-card focus-ring group relative min-h-[430px] overflow-hidden bg-charcoal shadow-frame">
+                        <img src="images/art/img12.png" alt="Abstract blue artwork used as a visual entry to poetry" class="absolute inset-0 h-full w-full object-cover">
+                        <div class="absolute inset-0 bg-black/40 transition group-hover:bg-black/25"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-7 text-white">
+                            <p class="text-xs uppercase tracking-[0.22em] text-white/75">Poems</p>
+                            <h3 class="mt-3 font-serif text-4xl italic">Read Poetry</h3>
+                        </div>
+                    </a>
+                    <a href="commissions.html" class="art-card focus-ring group relative min-h-[430px] overflow-hidden bg-charcoal shadow-frame">
+                        <img src="images/art/img3.png" alt="Artwork detail for commission inquiries" class="absolute inset-0 h-full w-full object-cover">
+                        <div class="absolute inset-0 bg-black/35 transition group-hover:bg-black/20"></div>
+                        <div class="absolute inset-x-0 bottom-0 p-7 text-white">
+                            <p class="text-xs uppercase tracking-[0.22em] text-white/75">Custom work</p>
+                            <h3 class="mt-3 font-serif text-4xl italic">Commission a Piece</h3>
+                        </div>
+                    </a>
+                </div>
             </div>
-        </div>
-    </section>
-    -->
+        </section>
 
-    <!-- POETRY SECTION -->
-    <section id="poetry" class="py-24 px-6 bg-white">
-        <div class="max-w-3xl mx-auto bg-white p-12 md:p-16 shadow-sm border border-gray-200 text-center relative">
-            <!-- Decorative quote mark -->
-            <div class="absolute -top-6 left-1/2 transform -translate-x-1/2 text-6xl font-serif text-gold opacity-30">"</div>
-            
-            <span class="block text-xs uppercase tracking-[0.2em] text-gray-400 mb-6">Today's Poetry • January 1st</span>
-            <h2 class="font-serif text-3xl md:text-4xl text-charcoal mb-6">Notes from the Garden</h2>
-            <p class="font-serif text-xl md:text-2xl text-gray-600 italic leading-relaxed mb-8">
-                "The light falls differently in October,<br>
-                A softer gold, a quieter sober,<br>
-                Resting on the leaves before they turn,<br>
-                Teaching us the patience we must learn..."
-            </p>
-            <a href="#" class="inline-block border-b border-gold text-gold font-serif italic text-lg hover:text-charcoal hover:border-charcoal transition-colors">
-                Read Full Poem
-            </a>
-        </div>
-    </section>
+        <section class="bg-white px-5 py-20 md:px-8">
+            <div class="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1fr_0.85fr] md:items-center">
+                <div class="soft-reveal">
+                    <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold">Recent poem</p>
+                    <h2 class="mt-3 font-serif text-4xl font-semibold text-charcoal md:text-5xl">Notes from the Garden</h2>
+                    <p class="mt-6 font-serif text-2xl italic leading-10 text-charcoal/70">The day leaves gold along the fence,<br>then folds itself into the trees.<br>What stays is not the light alone,<br>but how the evening learns to breathe.</p>
+                    <a href="poetry.html" class="focus-ring mt-8 inline-flex border-b border-gold pb-1 font-serif text-xl italic text-gold transition hover:text-charcoal">Read more poems</a>
+                </div>
+                <div class="soft-reveal border-l border-gold/40 pl-8">
+                    <p class="text-lg font-light leading-8 text-charcoal/70">Paintings and poems both begin with attention. The studio list gathers new work, seasonal notes, and commission openings as they are ready.</p>
+                    <a href="contact.html" class="focus-ring mt-7 inline-flex bg-charcoal px-7 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-gold">Inquire</a>
+                </div>
+            </div>
+        </section>
 
-    <!-- NEWSLETTER (New) -->
-    <section class="py-24 px-6 text-center bg-paper border-t border-gray-100">
-        <h2 class="font-serif text-3xl md:text-4xl text-charcoal mb-4">Join the Studio List</h2>
-        <p class="text-gray-500 font-light mb-8 max-w-md mx-auto">Receive early access to new collections, exhibition dates, and a weekly poem delivered to your inbox.</p>
-        <form class="max-w-md mx-auto flex flex-col md:flex-row gap-4">
-            <input type="email" placeholder="Your email address" class="flex-1 px-4 py-3 bg-cream border border-gray-200 focus:outline-none focus:border-gold font-light placeholder-gray-400">
-            <button type="button" class="px-8 py-3 bg-charcoal text-white text-xs uppercase tracking-[0.2em] hover:bg-gold transition-colors duration-300">
-                Subscribe
-            </button>
-        </form>
-    </section>
+        <section class="bg-charcoal px-5 py-20 text-white md:px-8">
+            <div class="mx-auto grid max-w-7xl gap-10 md:grid-cols-3">
+                <div class="md:col-span-1">
+                    <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold">Commissions</p>
+                    <h2 class="mt-3 font-serif text-4xl font-semibold md:text-5xl">A personal piece, carefully made.</h2>
+                </div>
+                <div class="grid gap-6 md:col-span-2 md:grid-cols-3">
+                    <div class="border-t border-white/20 pt-5">
+                        <h3 class="font-serif text-2xl">Share</h3>
+                        <p class="mt-3 text-sm leading-7 text-white/65">Send the story, subject, scale, timing, and any references that matter.</p>
+                    </div>
+                    <div class="border-t border-white/20 pt-5">
+                        <h3 class="font-serif text-2xl">Study</h3>
+                        <p class="mt-3 text-sm leading-7 text-white/65">Rosemary considers composition, palette, materials, and fit before work begins.</p>
+                    </div>
+                    <div class="border-t border-white/20 pt-5">
+                        <h3 class="font-serif text-2xl">Create</h3>
+                        <p class="mt-3 text-sm leading-7 text-white/65">The final piece is prepared for pickup, delivery, or shipping when complete.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-    <!-- FOOTER -->
-    <footer id="contact" class="bg-[#1a1a1a] text-gray-400 py-16 px-6 text-center text-sm font-light">
-        <div class="font-serif text-2xl text-white mb-6">Rosemary Williams</div>
-        <div class="flex justify-center gap-6 mb-8 text-xs uppercase tracking-widest">
-            <a href="#" class="hover:text-white transition-colors">Instagram</a>
-            <a href="#" class="hover:text-white transition-colors">Facebook</a>
-            <a href="#" class="hover:text-white transition-colors">Pinterest</a>
+    <footer class="bg-ink px-5 py-12 text-center text-sm text-white/55 md:px-8">
+        <div class="font-serif text-3xl text-white">Rosemary Williams</div>
+        <div class="mt-6 flex flex-wrap justify-center gap-5 text-xs uppercase tracking-[0.18em]">
+            <a href="art.html" class="transition hover:text-white">Art</a>
+            <a href="poetry.html" class="transition hover:text-white">Poetry</a>
+            <a href="commissions.html" class="transition hover:text-white">Commissions</a>
+            <a href="about.html" class="transition hover:text-white">About</a>
+            <a href="contact.html" class="transition hover:text-white">Contact</a>
         </div>
-        <div class="mb-4">
-             <a href="editart.html" class="text-[10px] text-gray-600 hover:text-gray-400 transition-colors uppercase tracking-widest">Admin Access</a>
-        </div>
-        <p class="opacity-60">&copy; 2026 Rosemary Williams Art. All Rights Reserved.</p>
+        <p class="mt-8">&copy; <span data-current-year>2026</span> Rosemary Williams Art. All rights reserved.</p>
     </footer>
 
+    <script src="site.js"></script>
 </body>
 </html>

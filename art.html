@@ -148,24 +148,33 @@
             background-size: auto 100%;
         }
     </style>
+    <link rel="stylesheet" href="site.css">
 </head>
 <body class="bg-charcoal overflow-hidden h-screen w-screen selection:bg-gold selection:text-white font-sans antialiased">
+    <a href="#gallery-wall" class="skip-link">Skip to gallery</a>
 
     <!-- NAVIGATION -->
-    <nav class="mt-3 absolute top-0 left-1/2 -translate-x-1/2 w-[70vw] p-1 md:px-16 flex justify-between items-center z-20 h-[60px] pl-3 pr-3 rounded-md bg-white/50">
-        <a href="index.html" class="font-serif text-xl md:text-3xl font-semibold text-charcoal tracking-wide">
-            Rosemary Williams
-        </a>
-        <div class="hidden md:flex gap-8">
-      	  <a href="index.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">Home</a>
-            <a href="art.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">Art</a>
-            <a href="poetry.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">Poetry</a>
-            <a href="commissions.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">Commissions</a>
-            <a href="about.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">About</a>
-            <a href="contact.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">Contact</a>
+    <nav class="fixed top-0 left-0 right-0 z-40 border-b border-white/10 bg-cream/90 backdrop-blur-md">
+        <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:px-8">
+            <a href="index.html" class="focus-ring font-serif text-2xl font-semibold tracking-wide text-charcoal md:text-3xl">Rosemary Williams</a>
+            <div class="hidden items-center gap-7 md:flex">
+                <a href="index.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Home</a>
+                <a href="art.html" class="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal">Art</a>
+                <a href="poetry.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Poetry</a>
+                <a href="commissions.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Commissions</a>
+                <a href="about.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">About</a>
+                <a href="contact.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Contact</a>
+            </div>
+            <button type="button" class="focus-ring md:hidden rounded-sm border border-charcoal/15 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em]" aria-controls="mobile-menu" aria-expanded="false" data-menu-button>Menu</button>
         </div>
-        <!-- Mobile Menu Icon Placeholder -->
-        <button class="md:hidden text-charcoal hover:text-charcoal/60 text-2xl">☰</button>
+        <div id="mobile-menu" class="mobile-menu border-t border-charcoal/10 bg-cream px-5 py-4 md:hidden">
+            <a href="index.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Home</a>
+            <a href="art.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Art</a>
+            <a href="poetry.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Poetry</a>
+            <a href="commissions.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Commissions</a>
+            <a href="about.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">About</a>
+            <a href="contact.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Contact</a>
+        </div>
     </nav>
 
     <!-- HORIZONTAL SCROLL CONTAINER -->
@@ -200,7 +209,7 @@
 	    scrollContainer.addEventListener('wheel', (evt) => {
 	        evt.preventDefault();
 	        scrollContainer.scrollLeft += evt.deltaY;
-	    });
+	    }, { passive: false });
 
         // --- DYNAMIC GALLERY LOADING ---
 
@@ -225,8 +234,24 @@
             { id: 17, title: "Memory", src: "images/art/img6.png", frame: "frame-1", yOffset: "translate-y-14" },
             { id: 18, title: "The Matriarch", src: "images/art/img13.png", frame: "frame-2", yOffset: "-translate-y-8" },
             { id: 19, title: "Wide Open", src: "images/art/img10.png", frame: "frame-3", yOffset: "translate-y-32" },
-            { id: 20, title: "The Final Chapter", src: "images/art/img5.png", frame: "frame-4", yOffset: "-translate-y-0", margin: "mr-20" }
+            { id: 20, title: "The Final Chapter", src: "images/art/img5.png", frame: "frame-4", yOffset: "translate-y-0", margin: "mr-20" }
         ];
+
+        const FRAME_CLASSES = new Set(["frame-1", "frame-2", "frame-3", "frame-4"]);
+        const OFFSET_CLASSES = new Set([
+            "-translate-y-32", "-translate-y-28", "-translate-y-24", "-translate-y-20", "-translate-y-12", "-translate-y-8",
+            "translate-y-0", "translate-y-8", "translate-y-12", "translate-y-14", "translate-y-16", "translate-y-20",
+            "translate-y-24", "translate-y-32", "translate-y-36", "translate-y-40"
+        ]);
+
+        function escapeHtml(value) {
+            return String(value)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+        }
 
         document.addEventListener('DOMContentLoaded', async () => {
             const galleryWall = document.getElementById('gallery-wall');
@@ -261,25 +286,24 @@
                 // Create the element
                 const artDiv = document.createElement('div');
                 
-                // Base classes
                 let containerClasses = `shrink-0 cursor-pointer relative group transition-transform duration-500 hover:scale-[1.02]`;
                 
-                // Add vertical offset (Y-Offset)
-                // If it's a new item without a specific offset class, default to 0
-                const yOffset = art.yOffset || 'translate-y-0';
+                const yOffset = OFFSET_CLASSES.has(art.yOffset) ? art.yOffset : 'translate-y-0';
                 containerClasses += ` ${yOffset}`;
 
-                // Add Margin Right if specified (for the last item usually)
-                if (art.margin) containerClasses += ` ${art.margin}`;
+                if (art.margin === "mr-20") containerClasses += ` ${art.margin}`;
 
                 artDiv.className = containerClasses;
+                const frameClass = FRAME_CLASSES.has(art.frame) ? art.frame : "frame-1";
+                const title = escapeHtml(art.title || "Untitled");
+                const src = escapeHtml(art.src || "");
 
                 artDiv.innerHTML = `
-                    <div class="${art.frame || 'frame-1'}">
-                        <img src="${art.src}" class="max-w-[500px] max-h-[500px] w-auto h-auto object-cover shadow-inner-mat" alt="${art.title}">
+                    <div class="${frameClass}">
+                        <img src="${src}" class="max-w-[500px] max-h-[500px] w-auto h-auto object-cover shadow-inner-mat" alt="${title}">
                     </div>
                     <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-400 mt-4 text-center font-serif italic text-white text-sm absolute left-0 w-full top-full">
-                        "${art.title}"
+                        "${title}"
                     </div>
                 `;
 
@@ -288,6 +312,7 @@
         });
 
 	</script>
+    <script src="site.js"></script>
 	
 </body>
 </html>

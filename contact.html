@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact Rosemary Williams about art, poetry, commissions, and studio inquiries.">
+    <title>Contact | Rosemary Williams</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Montserrat", "sans-serif"], serif: ["Cormorant Garamond", "serif"] },
+            colors: { cream: "#fcfbf9", paper: "#f2efea", gold: "#d4af37", charcoal: "#2c2c2c", ink: "#171717" },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="site.css">
+</head>
+<body class="bg-cream text-charcoal font-sans antialiased">
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <nav class="fixed top-0 left-0 right-0 z-40 border-b border-charcoal/10 bg-cream/90 backdrop-blur-md">
+        <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:px-8">
+            <a href="index.html" class="focus-ring font-serif text-2xl font-semibold tracking-wide text-charcoal md:text-3xl">Rosemary Williams</a>
+            <div class="hidden items-center gap-7 md:flex">
+                <a href="index.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Home</a>
+                <a href="art.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Art</a>
+                <a href="poetry.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Poetry</a>
+                <a href="commissions.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Commissions</a>
+                <a href="about.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">About</a>
+                <a href="contact.html" class="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal">Contact</a>
+            </div>
+            <button type="button" class="focus-ring md:hidden rounded-sm border border-charcoal/15 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em]" aria-controls="mobile-menu" aria-expanded="false" data-menu-button>Menu</button>
+        </div>
+        <div id="mobile-menu" class="mobile-menu border-t border-charcoal/10 bg-cream px-5 py-4 md:hidden">
+            <a href="index.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Home</a>
+            <a href="art.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Art</a>
+            <a href="poetry.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Poetry</a>
+            <a href="commissions.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Commissions</a>
+            <a href="about.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">About</a>
+            <a href="contact.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Contact</a>
+        </div>
+    </nav>
+
+    <main id="main-content" class="pt-16">
+        <section class="mx-auto grid max-w-7xl gap-10 px-5 py-16 md:grid-cols-[0.85fr_1.15fr] md:px-8 md:py-24">
+            <div>
+                <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold">Contact</p>
+                <h1 class="mt-4 font-serif text-5xl font-semibold leading-tight md:text-7xl">Studio inquiries and commission notes.</h1>
+                <p class="mt-6 text-lg font-light leading-8 text-charcoal/70">Reach out about available artwork, custom pieces, poetry readings, collaborations, or a studio question.</p>
+                <a href="mailto:studio@rosemarywilliams.art" class="focus-ring mt-8 inline-flex border-b border-gold pb-1 font-serif text-2xl italic text-gold transition hover:text-charcoal">studio@rosemarywilliams.art</a>
+            </div>
+
+            <form action="mailto:studio@rosemarywilliams.art" method="post" enctype="text/plain" class="bg-white p-6 shadow-sm md:p-8">
+                <div class="grid gap-5 md:grid-cols-2">
+                    <label class="block">
+                        <span class="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/55">Name</span>
+                        <input name="name" type="text" required class="mt-2 w-full border border-charcoal/15 bg-cream px-4 py-3 focus:border-gold focus:outline-none">
+                    </label>
+                    <label class="block">
+                        <span class="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/55">Email</span>
+                        <input name="email" type="email" required class="mt-2 w-full border border-charcoal/15 bg-cream px-4 py-3 focus:border-gold focus:outline-none">
+                    </label>
+                </div>
+                <label class="mt-5 block">
+                    <span class="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/55">Inquiry Type</span>
+                    <select name="inquiry" class="mt-2 w-full border border-charcoal/15 bg-cream px-4 py-3 focus:border-gold focus:outline-none">
+                        <option>Commission</option>
+                        <option>Available artwork</option>
+                        <option>Poetry</option>
+                        <option>General note</option>
+                    </select>
+                </label>
+                <label class="mt-5 block">
+                    <span class="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal/55">Message</span>
+                    <textarea name="message" rows="8" required class="mt-2 w-full border border-charcoal/15 bg-cream px-4 py-3 leading-7 focus:border-gold focus:outline-none"></textarea>
+                </label>
+                <button type="submit" class="focus-ring mt-6 inline-flex bg-charcoal px-7 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-gold">Send Inquiry</button>
+            </form>
+        </section>
+
+        <section class="bg-paper px-5 py-16 md:px-8">
+            <div class="mx-auto grid max-w-7xl gap-8 md:grid-cols-3">
+                <div class="border-t border-charcoal/20 pt-5">
+                    <h2 class="font-serif text-3xl">Commissions</h2>
+                    <p class="mt-3 text-sm leading-7 text-charcoal/65">Include subject, size, timing, and any reference details that matter.</p>
+                </div>
+                <div class="border-t border-charcoal/20 pt-5">
+                    <h2 class="font-serif text-3xl">Available work</h2>
+                    <p class="mt-3 text-sm leading-7 text-charcoal/65">Mention the piece title or image number if you are asking about a specific work.</p>
+                </div>
+                <div class="border-t border-charcoal/20 pt-5">
+                    <h2 class="font-serif text-3xl">Poetry</h2>
+                    <p class="mt-3 text-sm leading-7 text-charcoal/65">Send reading, publication, collaboration, and permission requests through the same studio inbox.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-ink px-5 py-12 text-center text-sm text-white/55 md:px-8">
+        <div class="font-serif text-3xl text-white">Rosemary Williams</div>
+        <div class="mt-6 flex flex-wrap justify-center gap-5 text-xs uppercase tracking-[0.18em]">
+            <a href="art.html" class="transition hover:text-white">Art</a>
+            <a href="poetry.html" class="transition hover:text-white">Poetry</a>
+            <a href="commissions.html" class="transition hover:text-white">Commissions</a>
+            <a href="about.html" class="transition hover:text-white">About</a>
+            <a href="contact.html" class="transition hover:text-white">Contact</a>
+        </div>
+        <p class="mt-8">&copy; <span data-current-year>2026</span> Rosemary Williams Art. All rights reserved.</p>
+    </footer>
+    <script src="site.js"></script>
+</body>
+</html>

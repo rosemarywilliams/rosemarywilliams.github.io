@@ -1,0 +1,84 @@
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  background: #2c2c2c;
+  color: #fff;
+  padding: 0.75rem 1rem;
+  transition: top 180ms ease;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+.mobile-menu.is-open {
+  display: grid;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid #d4af37;
+  outline-offset: 4px;
+}
+
+.soft-reveal {
+  opacity: 1;
+  transform: none;
+}
+
+.can-reveal .soft-reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+.can-reveal .soft-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.art-card img {
+  transition: transform 700ms ease;
+}
+
+.art-card:hover img,
+.art-card:focus-visible img {
+  transform: scale(1.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .can-reveal .soft-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

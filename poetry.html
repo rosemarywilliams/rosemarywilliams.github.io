@@ -3,138 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Poems by Rosemary Williams, collected from the studio practice behind the artwork.">
     <title>Poetry | Rosemary Williams</title>
-    
-    <!-- Google Fonts -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
-
-    <!-- Tailwind CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Tailwind Configuration -->
     <script>
-	  tailwind.config = {
-	    theme: {
-	      extend: {
-	        fontFamily: {
-	          sans: ['Montserrat', 'sans-serif'],
-	          serif: ['Cormorant Garamond', 'serif'],
-	        },
-	        colors: {
-	          cream: '#fcfbf9',
-	          paper: '#f2efea',
-	          gold: '#d4af37',
-	          charcoal: '#2c2c2c',
-	        },
-            boxShadow: {
-                'frame': '0 10px 30px -5px rgba(0, 0, 0, 0.5)',
-                'inner-mat': 'inset 0 0 20px rgba(0,0,0,0.2)',
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Montserrat", "sans-serif"],
+              serif: ["Cormorant Garamond", "serif"],
             },
-	        textShadow: {
-	          'default': '0 2px 4px rgba(0, 0, 0, 0.1)',
-	          'md': '0 3px 6px rgba(0, 0, 0, 0.2)',
-	        }
-	      },
-	    },
-	  }
+            colors: {
+              cream: "#fcfbf9",
+              paper: "#f2efea",
+              gold: "#d4af37",
+              charcoal: "#2c2c2c",
+              ink: "#171717",
+            },
+          },
+        },
+      };
     </script>
+    <link rel="stylesheet" href="site.css">
 </head>
-<body class="bg-cream text-gray-800 font-sans antialiased min-h-screen flex flex-col">
+<body class="min-h-screen bg-cream text-charcoal font-sans antialiased">
+    <a href="#main-content" class="skip-link">Skip to content</a>
 
-    <!-- NAVIGATION -->
-    <nav class="mt-3 absolute top-0 left-1/2 -translate-x-1/2 w-[90vw] md:w-[70vw] p-1 md:px-16 flex justify-between items-center z-20 h-[60px] pl-3 pr-3 rounded-md bg-white/50 backdrop-blur-sm">
-        <a href="index.html" class="font-serif text-2xl md:text-3xl font-semibold text-charcoal tracking-wide">
-            Rosemary Williams
-        </a>
-        <div class="hidden md:flex gap-8">
-      	    <a href="index.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">Home</a>
-            <a href="art.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">Art</a>
-            <a href="poetry.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">Poetry</a>
-            <a href="commissions.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">Commissions</a>
-            <a href="about.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">About</a>
-            <a href="contact.html" class="text-sm font-medium text-charcoal uppercase tracking-[0.2em] hover:text-charcoal/60 transition-colors duration-300">Contact</a>
+    <nav class="fixed top-0 left-0 right-0 z-40 border-b border-charcoal/10 bg-cream/90 backdrop-blur-md">
+        <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:px-8">
+            <a href="index.html" class="focus-ring font-serif text-2xl font-semibold tracking-wide text-charcoal md:text-3xl">Rosemary Williams</a>
+            <div class="hidden items-center gap-7 md:flex">
+                <a href="index.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Home</a>
+                <a href="art.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Art</a>
+                <a href="poetry.html" class="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal">Poetry</a>
+                <a href="commissions.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Commissions</a>
+                <a href="about.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">About</a>
+                <a href="contact.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Contact</a>
+            </div>
+            <button type="button" class="focus-ring md:hidden rounded-sm border border-charcoal/15 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em]" aria-controls="mobile-menu" aria-expanded="false" data-menu-button>Menu</button>
         </div>
-        <button class="md:hidden text-charcoal hover:text-charcoal/60 text-2xl">☰</button>
+        <div id="mobile-menu" class="mobile-menu border-t border-charcoal/10 bg-cream px-5 py-4 md:hidden">
+            <a href="index.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Home</a>
+            <a href="art.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Art</a>
+            <a href="poetry.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Poetry</a>
+            <a href="commissions.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Commissions</a>
+            <a href="about.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">About</a>
+            <a href="contact.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Contact</a>
+        </div>
     </nav>
 
-    <!-- HEADER -->
-    <header class="pt-32 pb-12 text-center px-4">
-        <h1 class="font-serif text-5xl md:text-6xl text-charcoal mb-4">Poetry</h1>
-        <div class="w-16 h-[1px] bg-gold mx-auto mb-6"></div>
-        <p class="text-gray-500 font-light italic text-lg">Where everyday moments are held long enough to become poetry.</p>
+    <header class="px-5 pb-14 pt-32 text-center md:px-8">
+        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold">Poetry</p>
+        <h1 class="mt-4 font-serif text-5xl font-semibold text-charcoal md:text-7xl">Field notes in verse</h1>
+        <p class="mx-auto mt-5 max-w-2xl text-lg font-light leading-8 text-charcoal/70">Short poems from the same attention that shapes Rosemary's visual work: color, weather, memory, and the ordinary world made vivid.</p>
     </header>
 
-    <!-- POEM CONTAINER -->
-    <main class="flex-grow max-w-2xl mx-auto w-full px-6 pb-24 space-y-24" id="poem-list">
-        <!-- Javascript will inject poems here -->
-        
-        <div id="loading-state" class="text-center py-20 text-gray-400 font-serif italic">
-            Loading collection...
-        </div>
-        
-        <div id="empty-state" class="hidden text-center py-20">
-            <p class="font-serif text-2xl text-gray-400 italic mb-4">"The page is yet blank, waiting for the ink."</p>
-            <p class="text-xs uppercase tracking-widest text-gray-400">No poems published yet.</p>
-        </div>
+    <main id="main-content" class="mx-auto max-w-3xl px-5 pb-24 md:px-8">
+        <div id="poem-list" class="space-y-12"></div>
     </main>
 
-    <!-- FOOTER -->
-    <footer class="bg-[#1a1a1a] text-gray-400 py-16 px-6 text-center text-sm font-light mt-auto">
-        <div class="font-serif text-2xl text-white mb-6">Rosemary Williams</div>
-        <div class="flex justify-center gap-6 mb-8 text-xs uppercase tracking-widest">
-            <a href="#" class="hover:text-white transition-colors">Instagram</a>
-            <a href="#" class="hover:text-white transition-colors">Facebook</a>
-            <a href="#" class="hover:text-white transition-colors">Pinterest</a>
+    <footer class="bg-ink px-5 py-12 text-center text-sm text-white/55 md:px-8">
+        <div class="font-serif text-3xl text-white">Rosemary Williams</div>
+        <div class="mt-6 flex flex-wrap justify-center gap-5 text-xs uppercase tracking-[0.18em]">
+            <a href="art.html" class="transition hover:text-white">Art</a>
+            <a href="poetry.html" class="transition hover:text-white">Poetry</a>
+            <a href="commissions.html" class="transition hover:text-white">Commissions</a>
+            <a href="about.html" class="transition hover:text-white">About</a>
+            <a href="contact.html" class="transition hover:text-white">Contact</a>
         </div>
-        <p class="opacity-60">&copy; 2026 Rosemary Williams Art. All Rights Reserved.</p>
+        <p class="mt-8">&copy; <span data-current-year>2026</span> Rosemary Williams Art. All rights reserved.</p>
     </footer>
 
-    <!-- SCRIPT TO LOAD POEMS -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('poem-list');
-            const loading = document.getElementById('loading-state');
-            const empty = document.getElementById('empty-state');
-            
-            // Fetch from local storage
-            const poems = JSON.parse(localStorage.getItem('rosemary_poetry_data') || '[]');
-            
-            loading.style.display = 'none';
+      const DEFAULT_POEMS = [
+        {
+          id: 1,
+          title: "Notes from the Garden",
+          date: "2026-01-01",
+          content: "The day leaves gold along the fence,\nthen folds itself into the trees.\nWhat stays is not the light alone,\nbut how the evening learns to breathe."
+        },
+        {
+          id: 2,
+          title: "After Rain",
+          date: "2025-12-12",
+          content: "Every stone keeps a darker name\nafter the rain has gone.\nThe path remembers weather\nlonger than the sky does."
+        },
+        {
+          id: 3,
+          title: "Small Window",
+          date: "2025-11-03",
+          content: "A small window can hold\nan impossible amount of blue.\nI stand beside it quietly,\nletting the room become sky."
+        }
+      ];
 
-            if (poems.length === 0) {
-                empty.style.display = 'block';
-                return;
-            }
+      function escapeHtml(value) {
+        return String(value)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
 
-            // Sort by date (newest first)
-            poems.sort((a, b) => new Date(b.date) - new Date(a.date));
+      function formatDate(value) {
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "";
+        return date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+      }
 
-            poems.forEach(poem => {
-                const article = document.createElement('article');
-                article.className = 'bg-white p-8 md:p-12 shadow-sm border border-gray-100 relative';
-                
-                // Format Date
-                const dateObj = new Date(poem.date);
-                const dateStr = dateObj.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+      document.addEventListener("DOMContentLoaded", () => {
+        const container = document.getElementById("poem-list");
+        const stored = JSON.parse(localStorage.getItem("rosemary_poetry_data") || "[]");
+        const poems = (Array.isArray(stored) && stored.length > 0 ? stored : DEFAULT_POEMS)
+          .slice()
+          .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-                article.innerHTML = `
-                    <div class="text-center mb-8">
-                        <span class="block text-xs uppercase tracking-[0.2em] text-gray-400 mb-3">${dateStr}</span>
-                        <h2 class="font-serif text-3xl md:text-4xl text-charcoal">${poem.title}</h2>
-                        <div class="w-8 h-[1px] bg-gold mx-auto mt-6"></div>
-                    </div>
-                    <div class="font-serif text-lg md:text-xl text-gray-700 leading-relaxed whitespace-pre-wrap">${poem.content}</div>
-                    <div class="mt-8 text-center">
-                        <span class="text-gold text-2xl">❧</span>
-                    </div>
-                `;
-                
-                container.appendChild(article);
-            });
-        });
+        container.innerHTML = poems.map((poem) => `
+          <article class="soft-reveal border-t border-charcoal/15 pt-10">
+            <div class="mb-7">
+              <span class="text-xs uppercase tracking-[0.2em] text-charcoal/45">${formatDate(poem.date)}</span>
+              <h2 class="mt-3 font-serif text-4xl font-semibold text-charcoal md:text-5xl">${escapeHtml(poem.title)}</h2>
+            </div>
+            <div class="whitespace-pre-wrap font-serif text-2xl leading-10 text-charcoal/75">${escapeHtml(poem.content)}</div>
+          </article>
+        `).join("");
+      });
     </script>
-
+    <script src="site.js"></script>
 </body>
 </html>
