@@ -1,9 +1,15 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "rosemarywilliams-art",
-  "pages_build_output_dir": ".",
+  "main": "./dist/worker/index.js",
   "compatibility_date": "2026-07-23",
   "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*", "/admin/api/*"],
+    "not_found_handling": "404-page"
+  },
   "d1_databases": [
     {
       "binding": "DB",
@@ -22,5 +28,15 @@
     "CF_ACCESS_TEAM_DOMAIN": "rosemarywilliamsart.cloudflareaccess.com",
     "CF_ACCESS_AUD": "601caf828c18195a6f397a87ece91e7db57e7123f1f27f1774244d57640169e7",
     "MAX_STORAGE_BYTES": "9000000000"
+  },
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "head_sampling_rate": 1
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.01
+    }
   }
 }

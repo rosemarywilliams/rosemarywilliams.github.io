@@ -1,8 +1,8 @@
 # Rosemary Williams Gallery Backend Setup
 
 The code is implemented. These remaining steps create the Cloudflare resources,
-connect them to the Pages project, and restrict the admin area to approved email
-addresses.
+connect them to the existing Worker, and restrict the admin area to approved
+email addresses.
 
 ## What the implementation provides
 
@@ -128,10 +128,15 @@ Keep:
 ```
 
 `ADMIN_EMAILS` is a second, server-side exact allowlist. To avoid committing
-personal email addresses to this repository, add it as an encrypted Pages
+personal email addresses to this repository, add it as an encrypted Worker
 secret:
 
-1. Open **Workers & Pages → the Pages project → Settings → Variables and
+> If the dashboard says variables cannot be added because the Worker only has
+> static assets, complete the first deployment in section 6 without this
+> secret. The deployment will succeed, and Cloudflare will enable runtime
+> secrets after the Worker script is active. Then return here.
+
+1. Open **Workers & Pages → `rosemarywilliams-art` → Settings → Variables and
    Secrets**.
 2. Add `ADMIN_EMAILS`.
 3. Enter the same addresses as the Access policy, separated by commas:
@@ -140,40 +145,49 @@ secret:
 
 4. Select **Encrypt**, then save it for Production.
 
-If the existing Pages project has a different project name, also replace:
+If the existing Worker has a different project name, also replace:
 
 ```jsonc
-"name": "rosemary-williams-art"
+"name": "rosemarywilliams-art"
 ```
 
-with the exact existing Pages project name.
+with the exact existing Worker name.
 
-Important: because `wrangler.jsonc` includes `pages_build_output_dir`, it
-becomes the source of truth for Pages bindings and variables after deployment.
+Important: `wrangler.jsonc` is the source of truth for the Worker's bindings,
+runtime variables, static assets, and observability settings.
 
-## 6. Deploy to Cloudflare Pages
+## 6. Deploy to the existing Cloudflare Worker
 
-If the Pages project is connected to this Git repository, commit and push the
-changes after completing `wrangler.jsonc`. Cloudflare will deploy them from the
-configured production branch.
+In **Workers & Pages → `rosemarywilliams-art` → Settings → Build**, use:
 
-For a manual deployment, use Wrangler from this repository folder:
+- Build command: `npm run build`
+- Deploy command: `npm run deploy`
+- Root directory: leave blank
+
+The build command compiles the file-based Pages Functions into one Worker
+entrypoint. The deploy command uploads that entrypoint and the static website
+as one Worker deployment.
+
+Commit and push after completing `wrangler.jsonc`. Cloudflare will install the
+pinned Wrangler dependency, compile the backend, and deploy from the configured
+production branch.
+
+For a manual deployment from this repository folder:
 
 ```powershell
-npx wrangler@latest pages deploy .
+npm install
+npm run build
+npm run deploy
 ```
 
-Do not use the dashboard's drag-and-drop uploader. Cloudflare does not compile a
-Pages `functions` directory from dashboard drag-and-drop deployments.
+After deployment, make sure the production domain is active under the Worker's
+**Settings → Domains & Routes**.
 
-After deployment, make sure the site's production custom domain is active under
-the Pages project's **Custom domains** settings.
-
-## 7. Confirm the Pages bindings
+## 7. Confirm the Worker bindings
 
 After the first deployment, open:
 
-**Workers & Pages → the Pages project → Settings → Bindings**
+**Workers & Pages → `rosemarywilliams-art` → Settings → Bindings**
 
 Confirm that the deployment has:
 
@@ -182,7 +196,7 @@ Confirm that the deployment has:
 
 The names are case-sensitive.
 
-Also confirm these variables appear in the Pages configuration:
+Also confirm these variables appear in the Worker configuration:
 
 - `PUBLIC_IMAGE_BASE_URL`
 - `CF_ACCESS_TEAM_DOMAIN`
@@ -195,7 +209,7 @@ to the repository.
 
 ## 8. Test the completed flow
 
-Use the production custom domain rather than a `pages.dev` preview:
+Use the production custom domain rather than a preview URL:
 
 1. Visit `https://rosemarywilliams.art/admin/`.
 2. Sign in using an approved email address.
@@ -207,9 +221,9 @@ Use the production custom domain rather than a `pages.dev` preview:
 7. Edit the test artwork and choose **Hide from public gallery**.
 8. Confirm it remains in the manager but disappears from the public gallery.
 
-The administrative API intentionally rejects requests on unprotected
-`pages.dev` URLs because those requests do not carry the production Access
-application token.
+The administrative API intentionally rejects requests on unprotected preview
+URLs because those requests do not carry the production Access application
+token.
 
 ## Normal use for Rosemary
 
