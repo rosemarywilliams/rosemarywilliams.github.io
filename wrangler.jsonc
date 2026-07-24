@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "rosemary-williams-art",
+  "name": "rosemarywilliams-art",
   "pages_build_output_dir": ".",
   "compatibility_date": "2026-07-23",
   "compatibility_flags": ["nodejs_compat"],
