@@ -34,7 +34,11 @@ export async function onRequestPut(context) {
       throw new HttpError(404, "That artwork could not be found.", "artwork_not_found");
     }
 
-    const artwork = validateArtwork(await readJson(context.request));
+    const artwork = validateArtwork(await readJson(context.request), {
+      frame: existing.frame,
+      yOffset: existing.y_offset,
+      sortOrder: existing.sort_order,
+    });
     if (artwork.id !== id) {
       throw new HttpError(400, "The artwork identifier cannot be changed.", "id_mismatch");
     }

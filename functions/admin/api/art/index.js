@@ -3,6 +3,7 @@ import { HttpError, handleError, json, readJson } from "../../../_lib/http.js";
 import {
   assertMediaBelongsToArtwork,
   findArtwork,
+  nextArtworkLayout,
   serializeArtwork,
   validateArtwork,
 } from "../../../_lib/artworks.js";
@@ -39,7 +40,10 @@ export async function onRequestPost(context) {
     await requireAdmin(context);
     requireDatabase(context.env);
 
-    const artwork = validateArtwork(await readJson(context.request));
+    const artwork = validateArtwork(
+      await readJson(context.request),
+      await nextArtworkLayout(context.env),
+    );
     if (await findArtwork(context.env, artwork.id)) {
       throw new HttpError(409, "An artwork with this identifier already exists.", "artwork_exists");
     }

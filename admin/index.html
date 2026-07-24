@@ -76,37 +76,6 @@
           <input id="dimensions" type="text" maxlength="100" placeholder="24 × 36 in">
         </div>
 
-        <div class="field-grid">
-          <div class="field">
-            <label for="frame">Frame style</label>
-            <select id="frame">
-              <option value="frame-1">Classic</option>
-              <option value="frame-2">Dark</option>
-              <option value="frame-3">Gold</option>
-              <option value="frame-4">Wood</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="y-offset">Wall position</label>
-            <select id="y-offset">
-              <option value="-translate-y-32">Very high</option>
-              <option value="-translate-y-24">High</option>
-              <option value="-translate-y-12">Mid-high</option>
-              <option value="translate-y-0" selected>Center</option>
-              <option value="translate-y-12">Mid-low</option>
-              <option value="translate-y-24">Low</option>
-              <option value="translate-y-32">Very low</option>
-              <option value="translate-y-40">Lowest</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="sort-order">Display order</label>
-          <input id="sort-order" type="number" min="0" max="1000000" step="1" value="10">
-          <p class="field-help">Smaller numbers appear first. Leave gaps of ten so works can be inserted later.</p>
-        </div>
-
         <div class="check-row">
           <label><input id="featured" type="checkbox"> Feature this work</label>
           <label><input id="hidden" type="checkbox"> Hide from public gallery</label>
@@ -146,7 +115,6 @@
         <span class="visibility-badge" hidden>Hidden</span>
       </div>
       <div class="card-copy">
-        <p class="card-order"></p>
         <h3 class="card-title"></h3>
         <p class="card-details"></p>
       </div>

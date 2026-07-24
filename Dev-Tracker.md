@@ -4,6 +4,18 @@ This file is used by the developer of RosemaryWilliams.art (Agents may use this 
 
 # Awaiting
 
+
+
+contact info: studio@rosemarywilliams.art is not an email that we have. for now change it to rt3williams@gmail.com
+
+we also need emailing to work so rosemary can get emails about commisions.
+
+DO NOT IMPLEMENT THIS EDIT! (i just need to jot it down so i dont forget): once we get the admin page and the uploading of images working, we also need the uploading of poetry working too.)
+
+on the art page: anytime an artpiece is displayed (it comes from the admin page): make sure the art is displayed in its original aspect ratio.
+
+optimize the art page. I believe the background image is a large file and might take a long time to load, how can we optimize this?
+
 Complete the Cloudflare account setup in BACKEND_SETUP.md (R2, D1, Access,
 production variables, and deployment).
 

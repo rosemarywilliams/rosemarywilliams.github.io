@@ -19,6 +19,17 @@ const OFFSETS = new Set([
   "translate-y-36",
   "translate-y-40",
 ]);
+const AUTOMATIC_FRAMES = ["frame-1", "frame-2", "frame-3", "frame-4"];
+const AUTOMATIC_OFFSETS = [
+  "-translate-y-12",
+  "translate-y-20",
+  "-translate-y-8",
+  "translate-y-32",
+  "-translate-y-24",
+  "translate-y-12",
+  "translate-y-40",
+  "-translate-y-20",
+];
 
 function cleanText(value, name, maximumLength, required = false) {
   const text = String(value ?? "").trim();
@@ -69,14 +80,19 @@ function cleanLegacyUrl(value) {
   throw new HttpError(400, "The legacy image URL is invalid.", "invalid_image_url");
 }
 
-export function validateArtwork(value) {
+export function validateArtwork(value, automaticLayout = {}) {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
     throw new HttpError(400, "Artwork data is required.", "invalid_artwork");
   }
 
   const id = cleanId(value.id);
-  const frame = FRAMES.has(value.frame) ? value.frame : "frame-1";
-  const yOffset = OFFSETS.has(value.yOffset) ? value.yOffset : "translate-y-0";
+  const frame = FRAMES.has(automaticLayout.frame)
+    ? automaticLayout.frame
+    : (FRAMES.has(value.frame) ? value.frame : "frame-1");
+  const yOffset = OFFSETS.has(automaticLayout.yOffset)
+    ? automaticLayout.yOffset
+    : (OFFSETS.has(value.yOffset) ? value.yOffset : "translate-y-0");
+  const sortOrder = automaticLayout.sortOrder ?? value.sortOrder;
   const imageKey = cleanObjectKey(value.imageKey, id);
   const thumbnailKey = cleanObjectKey(value.thumbnailKey, id);
   const legacyImageUrl = cleanLegacyUrl(value.legacyImageUrl);
@@ -99,7 +115,24 @@ export function validateArtwork(value) {
     legacyImageUrl,
     hidden: cleanBoolean(value.hidden),
     featured: cleanBoolean(value.featured),
-    sortOrder: cleanOrder(value.sortOrder),
+    sortOrder: cleanOrder(sortOrder),
+  };
+}
+
+export async function nextArtworkLayout(env) {
+  const row = await env.DB.prepare(
+    `SELECT
+       COUNT(*) AS artwork_count,
+       COALESCE(MAX(sort_order), 0) AS maximum_sort_order
+     FROM artworks`,
+  ).first();
+  const artworkCount = Math.max(0, Number(row?.artwork_count || 0));
+  const maximumSortOrder = Math.max(0, Number(row?.maximum_sort_order || 0));
+
+  return {
+    frame: AUTOMATIC_FRAMES[artworkCount % AUTOMATIC_FRAMES.length],
+    yOffset: AUTOMATIC_OFFSETS[artworkCount % AUTOMATIC_OFFSETS.length],
+    sortOrder: maximumSortOrder + 10,
   };
 }
 

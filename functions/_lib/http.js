@@ -26,11 +26,22 @@ export function handleError(error, request, action) {
     );
   }
 
+  const errorMessage = error instanceof Error ? error.message : String(error);
+  if (/no such table:\s*(artworks|media_objects)/i.test(errorMessage)) {
+    return json(
+      {
+        error: "The gallery database has not been initialized.",
+        code: "database_not_initialized",
+      },
+      { status: 503, headers: { "Cache-Control": "no-store" } },
+    );
+  }
+
   console.error(JSON.stringify({
     message: "Gallery request failed",
     action,
     path: new URL(request.url).pathname,
-    error: error instanceof Error ? error.message : String(error),
+    error: errorMessage,
   }));
 
   return json(

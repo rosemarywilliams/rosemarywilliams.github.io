@@ -213,30 +213,6 @@
 
         // --- DYNAMIC GALLERY LOADING ---
 
-        // 1. Define Default Data (Fallback)
-        const DEFAULT_ART = [
-            { id: 1, title: "The First Morning", src: "images/art/img17.png", frame: "frame-1", yOffset: "-translate-y-12" },
-            { id: 2, title: "Study in Blue", src: "images/art/img12.png", frame: "frame-2", yOffset: "translate-y-20" },
-            { id: 3, title: "Valley Silence", src: "images/art/img3.png", frame: "frame-3", yOffset: "-translate-y-8" },
-            { id: 4, title: "Gold Study", src: "images/art/img18.png", frame: "frame-4", yOffset: "translate-y-32" },
-            { id: 5, title: "Tall Shadows", src: "images/art/img9.png", frame: "frame-1", yOffset: "-translate-y-24" },
-            { id: 6, title: "Winter Light", src: "images/art/img14.png", frame: "frame-1", yOffset: "translate-y-12" },
-            { id: 7, title: "Small Joy", src: "images/art/img1.png", frame: "frame-3", yOffset: "translate-y-40" },
-            { id: 8, title: "Abstract Study V", src: "images/art/img19.png", frame: "frame-4", yOffset: "-translate-y-20" },
-            { id: 9, title: "Horizon Line", src: "images/art/img7.png", frame: "frame-1", yOffset: "translate-y-8" },
-            { id: 10, title: "Fragment", src: "images/art/img2.png", frame: "frame-2", yOffset: "-translate-y-32" },
-            { id: 11, title: "Evening Portrait", src: "images/art/img16.png", frame: "frame-3", yOffset: "translate-y-24" },
-            { id: 12, title: "Solitude", src: "images/art/img20.png", frame: "frame-4", yOffset: "-translate-y-20" },
-            { id: 13, title: "Coastal Dreams", src: "images/art/img8.png", frame: "frame-1", yOffset: "translate-y-16" },
-            { id: 14, title: "Golden Hour", src: "images/art/img11.png", frame: "frame-2", yOffset: "-translate-y-12" },
-            { id: 15, title: "Ascent", src: "images/art/img4.png", frame: "frame-3", yOffset: "translate-y-36" },
-            { id: 16, title: "Quiet Field", src: "images/art/img15.png", frame: "frame-4", yOffset: "-translate-y-28" },
-            { id: 17, title: "Memory", src: "images/art/img6.png", frame: "frame-1", yOffset: "translate-y-14" },
-            { id: 18, title: "The Matriarch", src: "images/art/img13.png", frame: "frame-2", yOffset: "-translate-y-8" },
-            { id: 19, title: "Wide Open", src: "images/art/img10.png", frame: "frame-3", yOffset: "translate-y-32" },
-            { id: 20, title: "The Final Chapter", src: "images/art/img5.png", frame: "frame-4", yOffset: "translate-y-0", margin: "mr-20" }
-        ];
-
         const FRAME_CLASSES = new Set(["frame-1", "frame-2", "frame-3", "frame-4"]);
         const OFFSET_CLASSES = new Set([
             "-translate-y-32", "-translate-y-28", "-translate-y-24", "-translate-y-20", "-translate-y-12", "-translate-y-8",
@@ -246,27 +222,29 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             const galleryWall = document.getElementById('gallery-wall');
-            let artCollection = [];
-            let apiLoaded = false;
+            let artCollection;
 
             try {
                 const response = await fetch(API_URL, {
                     headers: { Accept: "application/json" },
                     credentials: "same-origin"
                 });
-                if (response.ok) {
-                    const json = await response.json();
-                    if (Array.isArray(json)) {
-                        artCollection = json;
-                        apiLoaded = true;
-                    }
+                if (!response.ok) {
+                    throw new Error(`Gallery request failed with status ${response.status}.`);
                 }
+                const json = await response.json();
+                if (!Array.isArray(json)) {
+                    throw new Error("Gallery response was not a collection.");
+                }
+                artCollection = json;
             } catch (err) {
-                console.log("Using default collection (API unavailable or empty):", err);
-            }
-
-            if (!apiLoaded) {
-                artCollection = DEFAULT_ART;
+                console.error("Could not load the gallery collection.", err);
+                galleryWall.innerHTML = '';
+                const errorMessage = document.createElement("p");
+                errorMessage.className = "text-white/70 font-serif text-2xl";
+                errorMessage.textContent = "The gallery is temporarily unavailable.";
+                galleryWall.appendChild(errorMessage);
+                return;
             }
 
             galleryWall.innerHTML = '';
@@ -292,7 +270,7 @@
 
                 const frameClass = FRAME_CLASSES.has(art.frame) ? art.frame : "frame-1";
                 const title = String(art.title || "Untitled");
-                const src = art.imageUrl || art.src || "";
+                const src = art.imageUrl || "";
                 const description = art.altText || title;
 
                 const frame = document.createElement("div");

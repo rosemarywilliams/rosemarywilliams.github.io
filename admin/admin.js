@@ -22,9 +22,6 @@ const elements = {
   medium: document.getElementById("medium"),
   year: document.getElementById("year"),
   dimensions: document.getElementById("dimensions"),
-  frame: document.getElementById("frame"),
-  yOffset: document.getElementById("y-offset"),
-  sortOrder: document.getElementById("sort-order"),
   featured: document.getElementById("featured"),
   hidden: document.getElementById("hidden"),
   formMessage: document.getElementById("form-message"),
@@ -97,18 +94,10 @@ function revokeSelectedPreview() {
   }
 }
 
-function nextSortOrder() {
-  if (artworks.length === 0) return 10;
-  return Math.max(...artworks.map((artwork) => Number(artwork.sortOrder) || 0)) + 10;
-}
-
 function resetForm() {
   revokeSelectedPreview();
   elements.form.reset();
   elements.id.value = "";
-  elements.frame.value = "frame-1";
-  elements.yOffset.value = "translate-y-0";
-  elements.sortOrder.value = String(nextSortOrder());
   elements.formTitle.textContent = "Add new artwork";
   elements.saveLabel.textContent = "Add artwork";
   elements.cancelEdit.hidden = true;
@@ -126,9 +115,6 @@ function populateForm(artwork) {
   elements.medium.value = artwork.medium || "";
   elements.year.value = artwork.year || "";
   elements.dimensions.value = artwork.dimensions || "";
-  elements.frame.value = artwork.frame || "frame-1";
-  elements.yOffset.value = artwork.yOffset || "translate-y-0";
-  elements.sortOrder.value = String(artwork.sortOrder ?? 0);
   elements.featured.checked = artwork.featured === true;
   elements.hidden.checked = artwork.hidden === true;
   elements.formTitle.textContent = "Edit artwork";
@@ -154,7 +140,6 @@ function renderCollection() {
     image.src = artwork.thumbnailUrl || artwork.imageUrl;
     image.alt = artwork.altText || artwork.title;
     badge.hidden = !artwork.hidden;
-    fragment.querySelector(".card-order").textContent = `Order ${artwork.sortOrder}`;
     fragment.querySelector(".card-title").textContent = artwork.title;
     fragment.querySelector(".card-details").textContent = details || "No medium or year entered";
     fragment.querySelector(".edit-button").addEventListener("click", () => populateForm(artwork));
@@ -170,20 +155,30 @@ function updateStorage(storage) {
   const limit = Number(storage.limitBytes || 1);
   const percent = Math.min(100, Math.max(0, (used / limit) * 100));
   elements.storageLabel.textContent = `${formatBytes(used)} of ${formatBytes(limit)} used`;
+  elements.storageProgress.hidden = false;
   elements.storageProgress.value = percent;
   elements.storageProgress.textContent = `${percent.toFixed(1)}%`;
 }
 
 async function loadCollection() {
-  const [collection, storage] = await Promise.all([
+  const [collectionResult, storageResult] = await Promise.allSettled([
     apiRequest(API.artworks),
     apiRequest(API.media),
   ]);
+
+  if (collectionResult.status === "rejected") {
+    throw collectionResult.reason;
+  }
+
+  const collection = collectionResult.value;
   artworks = Array.isArray(collection) ? collection : [];
   renderCollection();
-  updateStorage(storage);
-  if (!elements.id.value) {
-    elements.sortOrder.value = String(nextSortOrder());
+
+  if (storageResult.status === "fulfilled") {
+    updateStorage(storageResult.value);
+  } else {
+    elements.storageLabel.textContent = "Storage unavailable";
+    elements.storageProgress.hidden = true;
   }
 }
 
@@ -305,9 +300,6 @@ function formArtwork(id, existing, media) {
     medium: elements.medium.value,
     year: elements.year.value,
     dimensions: elements.dimensions.value,
-    frame: elements.frame.value,
-    yOffset: elements.yOffset.value,
-    sortOrder: Number(elements.sortOrder.value),
     featured: elements.featured.checked,
     hidden: elements.hidden.checked,
     imageKey: media?.display?.key || existing?.imageKey || "",
@@ -421,10 +413,13 @@ async function initialize() {
   } catch (error) {
     elements.loadingState.textContent = error.message || "The gallery manager could not be loaded.";
     elements.storageLabel.textContent = "Storage unavailable";
+    elements.storageProgress.hidden = true;
     setMessage(
       error.code === "access_not_configured"
         ? "Cloudflare Access still needs to be configured. Follow BACKEND_SETUP.md."
-        : "The administrative service is unavailable.",
+        : (error.code === "database_not_initialized"
+          ? "The Cloudflare D1 migration still needs to be applied."
+          : "The administrative service is unavailable."),
       "error",
     );
   }

@@ -387,7 +387,6 @@ textarea:focus-visible {
   padding: 0.9rem;
 }
 
-.card-order,
 .card-details {
   margin: 0;
   color: var(--muted);

@@ -231,7 +231,8 @@ token.
 2. Sign in with the code sent to the approved email.
 3. Choose an image.
 4. Enter the title and image description.
-5. Optionally enter medium, year, dimensions, frame, and wall position.
+5. Optionally enter medium, year, and dimensions. Frame, wall position, and
+   display order are assigned automatically.
 6. Select **Add artwork**.
 
 The browser creates:
@@ -280,7 +281,13 @@ Sign out through `/cdn-cgi/access/logout`, then sign in again.
 Confirm the R2 custom domain is Active and exactly matches
 `PUBLIC_IMAGE_BASE_URL`. Do not use an `r2.dev` URL for production.
 
-### The public gallery shows the built-in fallback collection
+### “The gallery database has not been initialized”
+
+This is not caused by an empty R2 bucket. It means the configured D1 database
+does not contain the gallery tables. Apply the remote migrations from section 3
+and redeploy if needed.
+
+### The public gallery is temporarily unavailable
 
 Open `/api/art` directly. A non-200 response usually means the D1 binding is
-missing or the migration has not been applied.
+missing, points to the wrong database, or the migration has not been applied.
