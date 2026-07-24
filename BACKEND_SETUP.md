@@ -28,12 +28,9 @@ inside the free allowance.
 2. Go to **Storage & databases → R2**.
 3. Activate R2 if prompted.
 4. Create a Standard storage bucket named `rosemary-art`.
-5. Open the bucket, choose **Settings → Custom Domains → Add**, and connect:
-
-   `media.rosemarywilliams.art`
-
-6. Leave the public `r2.dev` development URL disabled. The custom domain is the
-   production URL and allows Cloudflare caching.
+5. Leave public bucket access and the `r2.dev` development URL disabled. The
+   site serves validated gallery objects through its R2 binding at
+   `/api/media/*`.
 
 CLI alternative:
 
@@ -123,7 +120,7 @@ Replace every placeholder in `wrangler.jsonc`:
 Keep:
 
 ```jsonc
-"PUBLIC_IMAGE_BASE_URL": "https://media.rosemarywilliams.art",
+"PUBLIC_IMAGE_BASE_URL": "https://rosemarywilliams.art/api/media",
 "MAX_STORAGE_BYTES": "9000000000"
 ```
 
@@ -217,7 +214,7 @@ Use the production custom domain rather than a preview URL:
 4. Add one test artwork.
 5. Open `https://rosemarywilliams.art/art.html` in a private browser window.
 6. Confirm the test artwork appears and its image URL begins with
-   `https://media.rosemarywilliams.art/`.
+   `https://rosemarywilliams.art/api/media/`.
 7. Edit the test artwork and choose **Hide from public gallery**.
 8. Confirm it remains in the manager but disappears from the public gallery.
 
@@ -278,8 +275,10 @@ Sign out through `/cdn-cgi/access/logout`, then sign in again.
 
 ### Upload succeeds but the image is not visible
 
-Confirm the R2 custom domain is Active and exactly matches
-`PUBLIC_IMAGE_BASE_URL`. Do not use an `r2.dev` URL for production.
+Confirm the deployment has the `ART_BUCKET` binding connected to
+`rosemary-art`, `PUBLIC_IMAGE_BASE_URL` is
+`https://rosemarywilliams.art/api/media`, and the latest code has been
+redeployed. The R2 bucket itself should remain private.
 
 ### “The gallery database has not been initialized”
 

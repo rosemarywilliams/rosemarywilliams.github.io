@@ -4,7 +4,9 @@ This file is used by the developer of RosemaryWilliams.art (Agents may use this 
 
 # Awaiting
 
-
+in the art page:
+- i want to be able to click to open a large unobstructed view of the art piece.
+- get rid of the quotation marks around the titles of the art pieces.
 
 contact info: studio@rosemarywilliams.art is not an email that we have. for now change it to rt3williams@gmail.com
 

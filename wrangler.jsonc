@@ -24,7 +24,7 @@
     }
   ],
   "vars": {
-    "PUBLIC_IMAGE_BASE_URL": "https://media.rosemarywilliams.art",
+    "PUBLIC_IMAGE_BASE_URL": "https://rosemarywilliams.art/api/media",
     "CF_ACCESS_TEAM_DOMAIN": "rosemarywilliamsart.cloudflareaccess.com",
     "CF_ACCESS_AUD": "601caf828c18195a6f397a87ece91e7db57e7123f1f27f1774244d57640169e7",
     "MAX_STORAGE_BYTES": "9000000000"
