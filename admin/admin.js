@@ -2,6 +2,7 @@ const API = {
   session: "/admin/api/session",
   artworks: "/admin/api/art",
   media: "/admin/api/media",
+  poems: "/admin/api/poetry",
 };
 
 const MAX_SOURCE_BYTES = 30_000_000;
@@ -36,7 +37,32 @@ const elements = {
   storageProgress: document.getElementById("storage-progress"),
 };
 
+const managerElements = {
+  artView: document.getElementById("art-manager"),
+  poetryView: document.getElementById("poetry-manager"),
+  tabs: [...document.querySelectorAll("[data-manager-tab]")],
+};
+
+const poemElements = {
+  form: document.getElementById("poem-form"),
+  formTitle: document.getElementById("poem-editor-title"),
+  cancelEdit: document.getElementById("cancel-poem-edit"),
+  id: document.getElementById("poem-id"),
+  title: document.getElementById("poem-title"),
+  publishedOn: document.getElementById("poem-date"),
+  body: document.getElementById("poem-body"),
+  hidden: document.getElementById("poem-hidden"),
+  formMessage: document.getElementById("poem-form-message"),
+  saveButton: document.getElementById("poem-save-button"),
+  saveLabel: document.getElementById("poem-save-label"),
+  loadingState: document.getElementById("poem-loading-state"),
+  emptyState: document.getElementById("poem-empty-state"),
+  list: document.getElementById("poem-list"),
+  cardTemplate: document.getElementById("poem-card-template"),
+};
+
 let artworks = [];
+let poems = [];
 let selectedPreviewUrl = "";
 
 function formatBytes(bytes) {
@@ -78,6 +104,26 @@ async function apiRequest(url, options = {}) {
   }
 
   return payload;
+}
+
+function activateManager(managerName, updateLocation = true) {
+  const activeManager = managerName === "poetry" ? "poetry" : "art";
+  managerElements.artView.hidden = activeManager !== "art";
+  managerElements.poetryView.hidden = activeManager !== "poetry";
+
+  for (const tab of managerElements.tabs) {
+    const isActive = tab.dataset.managerTab === activeManager;
+    tab.setAttribute("aria-selected", String(isActive));
+    tab.tabIndex = isActive ? 0 : -1;
+  }
+
+  if (updateLocation) {
+    history.replaceState(null, "", `#${activeManager}`);
+  }
+}
+
+function initialManager() {
+  return location.hash.toLowerCase() === "#poetry" ? "poetry" : "art";
 }
 
 function showPreview(url, summary, alt = "") {
@@ -179,6 +225,149 @@ async function loadCollection() {
   } else {
     elements.storageLabel.textContent = "Storage unavailable";
     elements.storageProgress.hidden = true;
+  }
+}
+
+function localDateValue(date = new Date()) {
+  const localTime = new Date(date.getTime() - date.getTimezoneOffset() * 60_000);
+  return localTime.toISOString().slice(0, 10);
+}
+
+function formatPoemDate(value) {
+  const date = new Date(`${value}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return value;
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+function setPoemMessage(message = "", kind = "") {
+  poemElements.formMessage.textContent = message;
+  if (kind) {
+    poemElements.formMessage.dataset.kind = kind;
+  } else {
+    delete poemElements.formMessage.dataset.kind;
+  }
+}
+
+function setPoemBusy(isBusy, label = "") {
+  poemElements.saveButton.disabled = isBusy;
+  poemElements.saveLabel.textContent = isBusy
+    ? label
+    : (poemElements.id.value ? "Save changes" : "Add poem");
+}
+
+function resetPoemForm() {
+  poemElements.form.reset();
+  poemElements.id.value = "";
+  poemElements.publishedOn.value = localDateValue();
+  poemElements.formTitle.textContent = "Add new poem";
+  poemElements.saveLabel.textContent = "Add poem";
+  poemElements.cancelEdit.hidden = true;
+  setPoemMessage();
+}
+
+function populatePoemForm(poem) {
+  poemElements.form.reset();
+  poemElements.id.value = poem.id;
+  poemElements.title.value = poem.title || "";
+  poemElements.publishedOn.value = poem.publishedOn || localDateValue();
+  poemElements.body.value = poem.body || "";
+  poemElements.hidden.checked = poem.hidden === true;
+  poemElements.formTitle.textContent = "Edit poem";
+  poemElements.saveLabel.textContent = "Save changes";
+  poemElements.cancelEdit.hidden = false;
+  setPoemMessage("Changes appear on the public poetry page after saving.");
+  activateManager("poetry");
+  document.getElementById("poem-editor").scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function renderPoems() {
+  poemElements.list.replaceChildren();
+  poemElements.loadingState.hidden = true;
+  poemElements.emptyState.hidden = poems.length !== 0;
+
+  for (const poem of poems) {
+    const fragment = poemElements.cardTemplate.content.cloneNode(true);
+    const card = fragment.querySelector(".poem-card");
+    const date = fragment.querySelector(".poem-card-date");
+    const badge = fragment.querySelector(".poem-visibility-badge");
+
+    date.dateTime = poem.publishedOn;
+    date.textContent = formatPoemDate(poem.publishedOn);
+    badge.hidden = !poem.hidden;
+    fragment.querySelector(".poem-card-title").textContent = poem.title;
+    fragment.querySelector(".poem-card-excerpt").textContent = poem.body;
+    fragment.querySelector(".edit-poem-button").addEventListener("click", () => populatePoemForm(poem));
+    fragment.querySelector(".delete-poem-button").addEventListener("click", () => deletePoem(poem));
+    card.dataset.poemId = poem.id;
+
+    poemElements.list.append(fragment);
+  }
+}
+
+async function loadPoems() {
+  const collection = await apiRequest(API.poems);
+  poems = Array.isArray(collection) ? collection : [];
+  renderPoems();
+}
+
+function formPoem(id) {
+  return {
+    id,
+    title: poemElements.title.value,
+    publishedOn: poemElements.publishedOn.value,
+    body: poemElements.body.value,
+    hidden: poemElements.hidden.checked,
+  };
+}
+
+async function savePoem(event) {
+  event.preventDefault();
+  setPoemMessage();
+
+  const editingId = poemElements.id.value;
+  const existing = editingId ? poems.find((poem) => poem.id === editingId) : null;
+  const id = editingId || crypto.randomUUID();
+  const poem = formPoem(id);
+
+  setPoemBusy(true, existing ? "Saving poem…" : "Publishing poem…");
+
+  try {
+    await apiRequest(existing ? `${API.poems}/${encodeURIComponent(id)}` : API.poems, {
+      method: existing ? "PUT" : "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(poem),
+    });
+
+    resetPoemForm();
+    await loadPoems();
+    setPoemMessage(existing ? "Poem updated." : "Poem published.", "success");
+  } catch (error) {
+    setPoemMessage(error.message || "The poem could not be saved.", "error");
+  } finally {
+    setPoemBusy(false);
+  }
+}
+
+async function deletePoem(poem) {
+  const confirmed = window.confirm(
+    `Permanently remove “${poem.title}” from the poetry page?\n\nTo keep it without showing it publicly, edit it and select “Hide from public poetry page” instead.`,
+  );
+  if (!confirmed) return;
+
+  setPoemMessage(`Removing “${poem.title}”…`);
+  try {
+    await apiRequest(`${API.poems}/${encodeURIComponent(poem.id)}`, { method: "DELETE" });
+    if (poemElements.id.value === poem.id) {
+      resetPoemForm();
+    }
+    await loadPoems();
+    setPoemMessage(`“${poem.title}” was removed.`, "success");
+  } catch (error) {
+    setPoemMessage(error.message || "The poem could not be removed.", "error");
   }
 }
 
@@ -403,25 +592,62 @@ elements.image.addEventListener("change", () => {
 
 elements.form.addEventListener("submit", saveArtwork);
 elements.cancelEdit.addEventListener("click", resetForm);
+poemElements.form.addEventListener("submit", savePoem);
+poemElements.cancelEdit.addEventListener("click", resetPoemForm);
+
+for (const tab of managerElements.tabs) {
+  tab.addEventListener("click", () => activateManager(tab.dataset.managerTab));
+}
+
+window.addEventListener("hashchange", () => activateManager(initialManager(), false));
+activateManager(initialManager(), false);
+
+function setupMessage(error) {
+  if (error.code === "access_not_configured") {
+    return "Cloudflare Access still needs to be configured. Follow BACKEND_SETUP.md.";
+  }
+  if (error.code === "database_not_initialized") {
+    return "The latest Cloudflare D1 migration still needs to be applied.";
+  }
+  return "The administrative service is unavailable.";
+}
 
 async function initialize() {
   try {
     const session = await apiRequest(API.session);
     elements.signedInUser.textContent = session.email;
-    await loadCollection();
-    resetForm();
   } catch (error) {
+    const message = error.message || "The studio manager could not be loaded.";
+    elements.loadingState.textContent = message;
+    poemElements.loadingState.textContent = message;
+    elements.storageLabel.textContent = "Storage unavailable";
+    elements.storageProgress.hidden = true;
+    setMessage(setupMessage(error), "error");
+    setPoemMessage(setupMessage(error), "error");
+    return;
+  }
+
+  const [artResult, poetryResult] = await Promise.allSettled([
+    loadCollection(),
+    loadPoems(),
+  ]);
+
+  if (artResult.status === "fulfilled") {
+    resetForm();
+  } else {
+    const error = artResult.reason;
     elements.loadingState.textContent = error.message || "The gallery manager could not be loaded.";
     elements.storageLabel.textContent = "Storage unavailable";
     elements.storageProgress.hidden = true;
-    setMessage(
-      error.code === "access_not_configured"
-        ? "Cloudflare Access still needs to be configured. Follow BACKEND_SETUP.md."
-        : (error.code === "database_not_initialized"
-          ? "The Cloudflare D1 migration still needs to be applied."
-          : "The administrative service is unavailable."),
-      "error",
-    );
+    setMessage(setupMessage(error), "error");
+  }
+
+  if (poetryResult.status === "fulfilled") {
+    resetPoemForm();
+  } else {
+    const error = poetryResult.reason;
+    poemElements.loadingState.textContent = error.message || "The poetry manager could not be loaded.";
+    setPoemMessage(setupMessage(error), "error");
   }
 }
 

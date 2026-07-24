@@ -4,30 +4,38 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow, noarchive">
-  <meta name="description" content="Private gallery manager for Rosemary Williams.">
-  <title>Gallery Manager | Rosemary Williams</title>
+  <meta name="description" content="Private art and poetry manager for Rosemary Williams.">
+  <title>Studio Manager | Rosemary Williams</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/admin/admin.css">
 </head>
 <body>
-  <a class="skip-link" href="#editor">Skip to editor</a>
+  <a class="skip-link" href="#admin-content">Skip to manager</a>
 
   <header class="admin-header">
     <div>
       <p class="eyebrow">Rosemary Williams</p>
-      <h1>Gallery manager</h1>
+      <h1>Studio manager</h1>
     </div>
     <nav aria-label="Administrative links">
       <span id="signed-in-user" class="signed-in-user"></span>
-      <a href="/art.html" target="_blank" rel="noopener">View gallery</a>
+      <a href="/art.html" target="_blank" rel="noopener">View art</a>
+      <a href="/poetry.html" target="_blank" rel="noopener">View poetry</a>
       <a href="/cdn-cgi/access/logout">Sign out</a>
     </nav>
   </header>
 
-  <main class="admin-layout">
-    <section id="editor" class="editor-panel" aria-labelledby="editor-title">
+  <nav class="manager-switcher" aria-label="Choose what to manage" role="tablist">
+    <button id="art-tab" class="manager-tab" type="button" role="tab" data-manager-tab="art" aria-controls="art-manager" aria-selected="true">Art</button>
+    <button id="poetry-tab" class="manager-tab" type="button" role="tab" data-manager-tab="poetry" aria-controls="poetry-manager" aria-selected="false" tabindex="-1">Poetry</button>
+  </nav>
+
+  <main id="admin-content">
+    <section id="art-manager" class="manager-view" role="tabpanel" aria-labelledby="art-tab">
+      <div class="admin-layout">
+        <section id="editor" class="editor-panel" aria-labelledby="editor-title">
       <div class="panel-heading">
         <div>
           <p class="eyebrow">Artwork details</p>
@@ -88,9 +96,9 @@
           <span id="save-progress" class="button-progress" aria-hidden="true"></span>
         </button>
       </form>
-    </section>
+        </section>
 
-    <section class="collection-panel" aria-labelledby="collection-title">
+        <section class="collection-panel" aria-labelledby="collection-title">
       <div class="panel-heading collection-heading">
         <div>
           <p class="eyebrow">Current collection</p>
@@ -105,6 +113,66 @@
       <div id="loading-state" class="empty-state">Loading the collection…</div>
       <div id="empty-state" class="empty-state" hidden>No artwork has been added yet.</div>
       <div id="art-list" class="art-list" aria-live="polite"></div>
+        </section>
+      </div>
+    </section>
+
+    <section id="poetry-manager" class="manager-view" role="tabpanel" aria-labelledby="poetry-tab" hidden>
+      <div class="admin-layout">
+        <section id="poem-editor" class="editor-panel" aria-labelledby="poem-editor-title">
+          <div class="panel-heading">
+            <div>
+              <p class="eyebrow">Poem details</p>
+              <h2 id="poem-editor-title">Add new poem</h2>
+            </div>
+            <button id="cancel-poem-edit" class="text-button" type="button" hidden>Cancel edit</button>
+          </div>
+
+          <form id="poem-form">
+            <input id="poem-id" type="hidden">
+
+            <div class="field">
+              <label for="poem-title">Title <span aria-hidden="true">*</span></label>
+              <input id="poem-title" type="text" maxlength="160" required autocomplete="off">
+            </div>
+
+            <div class="field">
+              <label for="poem-date">Publication date <span aria-hidden="true">*</span></label>
+              <input id="poem-date" type="date" required>
+              <p class="field-help">Poems appear newest first based on this date.</p>
+            </div>
+
+            <div class="field">
+              <label for="poem-body">Poem <span aria-hidden="true">*</span></label>
+              <textarea id="poem-body" class="poem-textarea" maxlength="20000" rows="16" required placeholder="Write or paste the poem here. Line breaks will be preserved."></textarea>
+            </div>
+
+            <div class="check-row check-row-single">
+              <label><input id="poem-hidden" type="checkbox"> Hide from public poetry page</label>
+            </div>
+
+            <div id="poem-form-message" class="form-message" role="status" aria-live="polite"></div>
+
+            <button id="poem-save-button" class="primary-button" type="submit">
+              <span id="poem-save-label">Add poem</span>
+              <span class="button-progress" aria-hidden="true"></span>
+            </button>
+          </form>
+        </section>
+
+        <section class="collection-panel" aria-labelledby="poem-collection-title">
+          <div class="panel-heading collection-heading">
+            <div>
+              <p class="eyebrow">Published writing</p>
+              <h2 id="poem-collection-title">Poetry</h2>
+            </div>
+          </div>
+
+          <div id="poem-loading-state" class="empty-state">Loading the poems…</div>
+          <div id="poem-empty-state" class="empty-state" hidden>No poems have been added yet.</div>
+          <div id="poem-list" class="poem-list" aria-live="polite"></div>
+        </section>
+      </div>
     </section>
   </main>
 
@@ -121,6 +189,23 @@
       <div class="card-actions">
         <button class="secondary-button edit-button" type="button">Edit</button>
         <button class="danger-button delete-button" type="button">Remove</button>
+      </div>
+    </article>
+  </template>
+
+  <template id="poem-card-template">
+    <article class="poem-card">
+      <div class="poem-card-copy">
+        <div class="poem-card-meta">
+          <time class="poem-card-date"></time>
+          <span class="visibility-badge poem-visibility-badge" hidden>Hidden</span>
+        </div>
+        <h3 class="poem-card-title"></h3>
+        <p class="poem-card-excerpt"></p>
+      </div>
+      <div class="card-actions">
+        <button class="secondary-button edit-poem-button" type="button">Edit</button>
+        <button class="danger-button delete-poem-button" type="button">Remove</button>
       </div>
     </article>
   </template>

@@ -1,4 +1,4 @@
-# Rosemary Williams Gallery Backend Setup
+# Rosemary Williams Studio Backend Setup
 
 The code is implemented. These remaining steps create the Cloudflare resources,
 connect them to the existing Worker, and restrict the admin area to approved
@@ -6,15 +6,16 @@ email addresses.
 
 ## What the implementation provides
 
-- `/admin/` — private gallery manager
+- `/admin/` — private art and poetry manager
 - `/api/art` — public, read-only artwork metadata
-- `/admin/api/*` — authenticated gallery management API
-- Cloudflare D1 — artwork metadata and storage accounting
+- `/api/poetry` — public, read-only poetry collection
+- `/admin/api/*` — authenticated art and poetry management API
+- Cloudflare D1 — artwork metadata, poems, and storage accounting
 - Cloudflare R2 — optimized display images and thumbnails
 - Cloudflare Access — email-based sign-in for Rosemary and the site owner
 - Automatic browser-side WebP conversion and resizing
 - A 9 GB application safety limit, leaving headroom below R2's 10 GB free tier
-- The existing twenty local images seeded into D1
+- The existing twenty local images and three poems seeded into D1
 
 The existing images remain in the website repository. New images uploaded from
 the manager are stored in R2.
@@ -58,7 +59,7 @@ npx wrangler@latest d1 create rosemary-gallery
 The command prints the database ID that belongs in `wrangler.jsonc`. Keep the
 binding name as `DB`.
 
-## 3. Apply the schema and seed the existing gallery
+## 3. Apply the schemas and seed the existing collections
 
 After putting the real D1 database ID in `wrangler.jsonc`, run this from the
 repository folder:
@@ -67,8 +68,9 @@ repository folder:
 npx wrangler@latest d1 migrations apply rosemary-gallery --remote
 ```
 
-Confirm the migration when Wrangler asks. The migration creates the tables and
-adds metadata for the twenty images already in `images/art/`.
+Confirm the migrations when Wrangler asks. They create the artwork, media, and
+poetry tables; add metadata for the twenty images already in `images/art/`;
+and add the three poems previously embedded in `poetry.html`.
 
 The command is safe to retry: the inserts use `INSERT OR IGNORE`, and Wrangler
 tracks applied migrations.
@@ -217,6 +219,11 @@ Use the production custom domain rather than a preview URL:
    `https://rosemarywilliams.art/api/media/`.
 7. Edit the test artwork and choose **Hide from public gallery**.
 8. Confirm it remains in the manager but disappears from the public gallery.
+9. Choose **Poetry** in the manager and add a test poem.
+10. Open `https://rosemarywilliams.art/poetry.html` in a private browser
+    window and confirm the poem appears.
+11. Edit the poem, choose **Hide from public poetry page**, and confirm it
+    remains in the manager but disappears from the public page.
 
 The administrative API intentionally rejects requests on unprotected preview
 URLs because those requests do not carry the production Access application
@@ -226,11 +233,13 @@ token.
 
 1. Go to `/admin/`.
 2. Sign in with the code sent to the approved email.
-3. Choose an image.
-4. Enter the title and image description.
-5. Optionally enter medium, year, and dimensions. Frame, wall position, and
+3. Choose **Art** or **Poetry**.
+4. For art, choose an image, enter its title and image description, and
+   optionally enter its medium, year, and dimensions. Frame, wall position, and
    display order are assigned automatically.
-6. Select **Add artwork**.
+5. For poetry, enter the title, publication date, and poem. Line breaks are
+   preserved automatically.
+6. Select **Add artwork** or **Add poem**.
 
 The browser creates:
 
@@ -280,13 +289,19 @@ Confirm the deployment has the `ART_BUCKET` binding connected to
 `https://rosemarywilliams.art/api/media`, and the latest code has been
 redeployed. The R2 bucket itself should remain private.
 
-### “The gallery database has not been initialized”
+### “The site database has not been fully initialized”
 
 This is not caused by an empty R2 bucket. It means the configured D1 database
-does not contain the gallery tables. Apply the remote migrations from section 3
-and redeploy if needed.
+does not contain one or more required tables. Apply all remote migrations from
+section 3 and redeploy if needed.
 
 ### The public gallery is temporarily unavailable
 
 Open `/api/art` directly. A non-200 response usually means the D1 binding is
 missing, points to the wrong database, or the migration has not been applied.
+
+### The poetry page is temporarily unavailable
+
+Open `/api/poetry` directly. A non-200 response usually means the D1 binding is
+missing, points to the wrong database, or migration `0002_poetry.sql` has not
+been applied.

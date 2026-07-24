@@ -80,58 +80,80 @@
     </footer>
 
     <script>
-      const DEFAULT_POEMS = [
-        {
-          id: 1,
-          title: "Notes from the Garden",
-          date: "2026-01-01",
-          content: "The day leaves gold along the fence,\nthen folds itself into the trees.\nWhat stays is not the light alone,\nbut how the evening learns to breathe."
-        },
-        {
-          id: 2,
-          title: "After Rain",
-          date: "2025-12-12",
-          content: "Every stone keeps a darker name\nafter the rain has gone.\nThe path remembers weather\nlonger than the sky does."
-        },
-        {
-          id: 3,
-          title: "Small Window",
-          date: "2025-11-03",
-          content: "A small window can hold\nan impossible amount of blue.\nI stand beside it quietly,\nletting the room become sky."
-        }
-      ];
-
-      function escapeHtml(value) {
-        return String(value)
-          .replaceAll("&", "&amp;")
-          .replaceAll("<", "&lt;")
-          .replaceAll(">", "&gt;")
-          .replaceAll('"', "&quot;")
-          .replaceAll("'", "&#039;");
-      }
+      const POETRY_API_URL = "/api/poetry";
 
       function formatDate(value) {
-        const date = new Date(value);
+        const date = new Date(`${value}T00:00:00`);
         if (Number.isNaN(date.getTime())) return "";
-        return date.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+        return date.toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
       }
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const container = document.getElementById("poem-list");
-        const stored = JSON.parse(localStorage.getItem("rosemary_poetry_data") || "[]");
-        const poems = (Array.isArray(stored) && stored.length > 0 ? stored : DEFAULT_POEMS)
-          .slice()
-          .sort((a, b) => new Date(b.date) - new Date(a.date));
+      function message(text) {
+        const paragraph = document.createElement("p");
+        paragraph.className = "border-t border-charcoal/15 pt-10 text-center font-serif text-2xl text-charcoal/60";
+        paragraph.textContent = text;
+        return paragraph;
+      }
 
-        container.innerHTML = poems.map((poem) => `
-          <article class="soft-reveal border-t border-charcoal/15 pt-10">
-            <div class="mb-7">
-              <span class="text-xs uppercase tracking-[0.2em] text-charcoal/45">${formatDate(poem.date)}</span>
-              <h2 class="mt-3 font-serif text-4xl font-semibold text-charcoal md:text-5xl">${escapeHtml(poem.title)}</h2>
-            </div>
-            <div class="whitespace-pre-wrap font-serif text-2xl leading-10 text-charcoal/75">${escapeHtml(poem.content)}</div>
-          </article>
-        `).join("");
+      function poemArticle(poem) {
+        const article = document.createElement("article");
+        article.className = "soft-reveal border-t border-charcoal/15 pt-10";
+
+        const heading = document.createElement("div");
+        heading.className = "mb-7";
+
+        const date = document.createElement("time");
+        date.className = "text-xs uppercase tracking-[0.2em] text-charcoal/45";
+        date.dateTime = poem.publishedOn;
+        date.textContent = formatDate(poem.publishedOn);
+
+        const title = document.createElement("h2");
+        title.className = "mt-3 font-serif text-4xl font-semibold text-charcoal md:text-5xl";
+        title.textContent = poem.title || "Untitled";
+
+        const body = document.createElement("div");
+        body.className = "whitespace-pre-wrap font-serif text-2xl leading-10 text-charcoal/75";
+        body.textContent = poem.body || "";
+
+        heading.append(date, title);
+        article.append(heading, body);
+        return article;
+      }
+
+      document.addEventListener("DOMContentLoaded", async () => {
+        const container = document.getElementById("poem-list");
+
+        try {
+          const response = await fetch(POETRY_API_URL, {
+            headers: { Accept: "application/json" },
+            credentials: "same-origin",
+          });
+          if (!response.ok) {
+            throw new Error(`Poetry request failed with status ${response.status}.`);
+          }
+
+          const poems = await response.json();
+          if (!Array.isArray(poems)) {
+            throw new Error("Poetry response was not a collection.");
+          }
+
+          container.replaceChildren();
+          if (poems.length === 0) {
+            container.append(message("New poems are being prepared."));
+            return;
+          }
+
+          for (const poem of poems) {
+            container.append(poemArticle(poem));
+          }
+        } catch (error) {
+          console.error("Could not load the poetry collection.", error);
+          container.replaceChildren(message("Poetry is temporarily unavailable."));
+        }
       });
     </script>
     <script src="site.js"></script>

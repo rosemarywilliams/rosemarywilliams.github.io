@@ -27,10 +27,10 @@ export function handleError(error, request, action) {
   }
 
   const errorMessage = error instanceof Error ? error.message : String(error);
-  if (/no such table:\s*(artworks|media_objects)/i.test(errorMessage)) {
+  if (/no such table:\s*(artworks|media_objects|poems)/i.test(errorMessage)) {
     return json(
       {
-        error: "The gallery database has not been initialized.",
+        error: "The site database has not been fully initialized.",
         code: "database_not_initialized",
       },
       { status: 503, headers: { "Cache-Control": "no-store" } },
