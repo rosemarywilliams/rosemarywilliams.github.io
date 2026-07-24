@@ -65,19 +65,27 @@ body {
 
 /* Home */
 .home-page {
-  --home-ink: #292c2c;
-  --home-paper: #f7f4ed;
-  --home-clay: #aa6a3f;
+  --home-ink: #202020;
+  --home-paper: #ffffff;
+  --home-clay: #c87d55;
   background: var(--home-paper);
+}
+
+.home-page .focus-ring:focus-visible {
+  outline-color: var(--home-clay);
+}
+
+.home-brand {
+  font-size: clamp(1.2rem, 2vw, 1.45rem);
 }
 
 .home-nav-link,
 .home-mobile-link,
 .home-menu-button {
   color: var(--home-ink);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  letter-spacing: 0.17em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
@@ -116,16 +124,21 @@ body {
 }
 
 .home-hero {
-  display: grid;
-  min-height: calc(100vh - 4.75rem);
-  background: #dfe7ed;
+  position: relative;
+  display: flex;
+  min-height: calc(100vh - 5rem);
+  min-height: calc(100svh - 5rem);
+  margin-bottom: 13rem;
+  padding: 4rem 1.5rem 17rem;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--home-paper);
 }
 
 .home-hero-copy {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 5.5rem 1.5rem 4rem;
+  width: min(100%, 76rem);
+  margin: 0 auto;
+  text-align: center;
 }
 
 .home-kicker {
@@ -152,17 +165,21 @@ body {
   line-height: 0.84;
 }
 
-.home-hero h1 em {
+.home-hero h1 {
+  max-width: 17ch;
+  margin: 0 auto;
+  font-size: clamp(3rem, 7.5vw, 7rem);
   font-weight: 400;
+  line-height: 0.94;
 }
 
-.home-introduction {
-  max-width: 28rem;
-  margin: 2rem 0 0;
-  color: rgba(41, 44, 44, 0.76);
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.8;
+.home-hero-copy > p {
+  margin: 1.5rem 0 0;
+  color: var(--home-clay);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .home-button {
@@ -191,21 +208,58 @@ body {
   line-height: 0;
 }
 
-.home-hero-art {
-  position: relative;
-  min-height: 31rem;
-  margin: 0;
-  overflow: hidden;
-  background: #3f5873;
+.home-hero-gallery {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  width: min(100%, 90rem);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2rem 1.25rem;
+  transform: translateY(50%);
 }
 
-.home-hero-art img {
+.home-hero-work {
+  display: block;
+  min-width: 0;
+}
+
+.home-hero-work figure {
+  margin: 0;
+}
+
+.home-hero-image {
+  display: flex;
+  height: 10rem;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.home-hero-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  transition: transform 300ms ease;
 }
 
-.home-hero-art figcaption,
+.home-hero-work:hover .home-hero-image img,
+.home-hero-work:focus-visible .home-hero-image img {
+  transform: translateY(-0.35rem);
+}
+
+.home-hero-work figcaption {
+  margin-top: 0.75rem;
+  color: var(--home-ink);
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1rem;
+  line-height: 1.2;
+  text-align: center;
+}
+
 .home-work figcaption {
   display: flex;
   justify-content: space-between;
@@ -215,15 +269,6 @@ body {
   font-size: 1.1rem;
 }
 
-.home-hero-art figcaption {
-  position: absolute;
-  right: 1.25rem;
-  bottom: 1.1rem;
-  left: 1.25rem;
-  color: white;
-}
-
-.home-hero-art figcaption span:last-child,
 .home-work figcaption span:last-child {
   font-family: "Montserrat", sans-serif;
   font-size: 0.57rem;
@@ -328,11 +373,12 @@ body {
   gap: 3rem;
   align-items: center;
   padding: 6rem 1.5rem;
-  background: #e6d9c8;
+  border-block: 1px solid rgba(32, 32, 32, 0.1);
+  background: var(--home-paper);
 }
 
 .home-statement-mark {
-  color: rgba(170, 106, 63, 0.75);
+  color: rgba(32, 32, 32, 0.12);
   font-family: "Cormorant Garamond", serif;
   font-size: clamp(6rem, 20vw, 12rem);
   font-style: italic;
@@ -384,7 +430,7 @@ body {
 }
 
 .home-button--light {
-  background: #f7f4ed;
+  background: var(--home-paper);
   color: var(--home-ink);
 }
 
@@ -395,13 +441,14 @@ body {
 
 .home-commission {
   padding: 7rem 1.5rem;
-  background: #bd7952;
+  border-top: 1px solid rgba(32, 32, 32, 0.1);
+  background: var(--home-paper);
   color: var(--home-ink);
   text-align: center;
 }
 
 .home-commission .home-kicker {
-  color: #5f3725;
+  color: var(--home-clay);
 }
 
 .home-commission h2 {
@@ -424,7 +471,7 @@ body {
   display: grid;
   gap: 2.5rem;
   padding: 3rem 1.5rem 2rem;
-  background: #171a19;
+  background: var(--home-ink);
   color: rgba(255, 255, 255, 0.68);
 }
 
@@ -454,7 +501,6 @@ body {
 }
 
 @media (min-width: 640px) {
-  .home-hero-copy,
   .home-works,
   .home-statement,
   .home-poetry-copy,
@@ -462,6 +508,24 @@ body {
   .home-footer {
     padding-right: 3rem;
     padding-left: 3rem;
+  }
+
+  .home-hero {
+    margin-bottom: 10rem;
+    padding-right: 3rem;
+    padding-bottom: 15rem;
+    padding-left: 3rem;
+  }
+
+  .home-hero-gallery {
+    padding-right: 3rem;
+    padding-left: 3rem;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(1.25rem, 3vw, 3rem);
+  }
+
+  .home-hero-image {
+    height: clamp(12rem, 22vw, 19rem);
   }
 
   .home-work-grid {
@@ -472,21 +536,14 @@ body {
 
 @media (min-width: 900px) {
   .home-hero {
-    grid-template-columns: minmax(27rem, 0.94fr) minmax(32rem, 1.06fr);
+    min-height: calc(100vh - 5rem);
+    min-height: calc(100svh - 5rem);
+    margin-bottom: 11rem;
+    padding: 5rem clamp(3rem, 8vw, 8rem) 17rem;
   }
 
   .home-hero-copy {
-    padding: 6rem clamp(3rem, 8vw, 9rem);
-  }
-
-  .home-hero-art {
-    min-height: calc(100vh - 4.75rem);
-  }
-
-  .home-hero-art figcaption {
-    right: 2.5rem;
-    bottom: 2rem;
-    left: 2.5rem;
+    padding: 0;
   }
 
   .home-works {

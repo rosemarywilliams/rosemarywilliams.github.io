@@ -15,19 +15,19 @@
         theme: {
           extend: {
             fontFamily: { sans: ["Montserrat", "sans-serif"], serif: ["Cormorant Garamond", "serif"] },
-            colors: { cream: "#f7f4ed", paper: "#e8e1d4", gold: "#aa6a3f", charcoal: "#292c2c", ink: "#171a19" },
+            colors: { cream: "#ffffff", paper: "#f5f5f2", gold: "#C87D55", charcoal: "#202020", ink: "#171717" },
           },
         },
       };
     </script>
     <link rel="stylesheet" href="site.css">
 </head>
-<body class="home-page bg-cream text-charcoal font-sans antialiased">
+<body class="home-page bg-white text-charcoal font-sans antialiased">
     <a href="#main-content" class="skip-link">Skip to content</a>
 
-    <nav class="home-nav relative z-40 border-b border-charcoal/10 bg-cream">
-        <div class="mx-auto flex h-[4.75rem] max-w-[90rem] items-center justify-between px-5 md:px-10">
-            <a href="index.html" class="focus-ring font-serif text-[1.7rem] font-medium leading-none tracking-wide text-charcoal md:text-[2rem]">Rosemary Williams</a>
+    <nav class="home-nav relative z-40 border-b border-charcoal/10 bg-white">
+        <div class="mx-auto flex h-20 max-w-[90rem] items-center justify-between px-5 md:px-10">
+            <a href="index.html" class="focus-ring home-brand font-serif font-medium leading-none tracking-wide text-charcoal">Rosemary Williams</a>
             <div class="hidden items-center gap-7 lg:flex">
                 <a href="art.html" class="home-nav-link">Art</a>
                 <a href="poetry.html" class="home-nav-link">Poetry</a>
@@ -37,7 +37,7 @@
             </div>
             <button type="button" class="focus-ring home-menu-button lg:hidden" aria-controls="mobile-menu" aria-expanded="false" data-menu-button>Menu</button>
         </div>
-        <div id="mobile-menu" class="mobile-menu border-t border-charcoal/10 bg-cream px-5 py-4 lg:hidden">
+        <div id="mobile-menu" class="mobile-menu border-t border-charcoal/10 bg-white px-5 py-4 lg:hidden">
             <a href="art.html" class="home-mobile-link">Art</a>
             <a href="poetry.html" class="home-mobile-link">Poetry</a>
             <a href="commissions.html" class="home-mobile-link">Commissions</a>
@@ -47,16 +47,45 @@
     </nav>
 
     <header class="home-hero">
-        <div class="home-hero-copy">
-            <p class="home-kicker">Rosemary Williams · Artist &amp; Poet</p>
-            <h1>Painting the<br><em>things that stay.</em></h1>
-            <p class="home-introduction">A collection of paintings and poems rooted in landscape, memory, and the quiet theatre of everyday life.</p>
-            <a href="art.html" class="focus-ring home-button">View selected works <span aria-hidden="true">↗</span></a>
+        <div class="home-hero-copy soft-reveal">
+            <h1>Every face holds a history and every landscape whispers a secret</h1>
+            <p>Art by Rosemary Williams</p>
         </div>
-        <figure class="home-hero-art">
-            <img src="images/art/img17.png" alt="The First Morning, an abstract painting in blue and white by Rosemary Williams">
-            <figcaption><span>The First Morning</span><span>Oil on canvas</span></figcaption>
-        </figure>
+
+        <div class="home-hero-gallery" data-home-featured aria-label="Featured artwork">
+            <a href="art.html" class="focus-ring home-hero-work">
+                <figure>
+                    <div class="home-hero-image">
+                        <img src="images/art/img17.png" alt="The First Morning, an artwork by Rosemary Williams" fetchpriority="high" decoding="async">
+                    </div>
+                    <figcaption>The First Morning</figcaption>
+                </figure>
+            </a>
+            <a href="art.html" class="focus-ring home-hero-work">
+                <figure>
+                    <div class="home-hero-image">
+                        <img src="images/art/img12.png" alt="Study in Blue, an artwork by Rosemary Williams" loading="lazy" decoding="async">
+                    </div>
+                    <figcaption>Study in Blue</figcaption>
+                </figure>
+            </a>
+            <a href="art.html" class="focus-ring home-hero-work">
+                <figure>
+                    <div class="home-hero-image">
+                        <img src="images/art/img3.png" alt="Valley Silence, an artwork by Rosemary Williams" loading="lazy" decoding="async">
+                    </div>
+                    <figcaption>Valley Silence</figcaption>
+                </figure>
+            </a>
+            <a href="art.html" class="focus-ring home-hero-work">
+                <figure>
+                    <div class="home-hero-image">
+                        <img src="images/art/img18.png" alt="Gold Study, an artwork by Rosemary Williams" loading="lazy" decoding="async">
+                    </div>
+                    <figcaption>Gold Study</figcaption>
+                </figure>
+            </a>
+        </div>
     </header>
 
     <main id="main-content">

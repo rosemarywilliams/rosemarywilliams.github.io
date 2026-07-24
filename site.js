@@ -25,6 +25,44 @@ document.addEventListener("DOMContentLoaded", () => {
     node.textContent = new Date().getFullYear();
   });
 
+  const featuredGallery = document.querySelector("[data-home-featured]");
+  if (featuredGallery) {
+    fetch("/api/art", {
+      headers: { Accept: "application/json" },
+      credentials: "same-origin",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Featured artwork request failed with status ${response.status}.`);
+        }
+        return response.json();
+      })
+      .then((artworks) => {
+        if (!Array.isArray(artworks)) return;
+
+        const featured = artworks.filter((artwork) => artwork.featured);
+        const featuredIds = new Set(featured.map((artwork) => artwork.id));
+        const remaining = artworks.filter((artwork) => !featuredIds.has(artwork.id));
+        const selection = [...featured, ...remaining].slice(0, 4);
+        const cards = featuredGallery.querySelectorAll(".home-hero-work");
+
+        selection.forEach((artwork, index) => {
+          const card = cards[index];
+          const image = card?.querySelector("img");
+          const caption = card?.querySelector("figcaption");
+          const source = artwork.thumbnailUrl || artwork.imageUrl;
+          if (!card || !image || !caption || !source) return;
+
+          image.src = source;
+          image.alt = artwork.altText || artwork.title || "Artwork by Rosemary Williams";
+          caption.textContent = artwork.title || "Untitled";
+        });
+      })
+      .catch((error) => {
+        console.warn("Using the home page's fallback featured artwork.", error);
+      });
+  }
+
   const revealItems = document.querySelectorAll(".soft-reveal");
   if ("IntersectionObserver" in window && revealItems.length > 0) {
     const observer = new IntersectionObserver(
