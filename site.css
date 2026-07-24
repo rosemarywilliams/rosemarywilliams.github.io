@@ -63,6 +63,513 @@ body {
   transform: scale(1.05);
 }
 
+/* Home */
+.home-page {
+  --home-ink: #292c2c;
+  --home-paper: #f7f4ed;
+  --home-clay: #aa6a3f;
+  background: var(--home-paper);
+}
+
+.home-nav-link,
+.home-mobile-link,
+.home-menu-button {
+  color: var(--home-ink);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.17em;
+  text-transform: uppercase;
+}
+
+.home-nav-link {
+  position: relative;
+  padding-block: 0.5rem;
+}
+
+.home-nav-link::after {
+  position: absolute;
+  right: 0;
+  bottom: 0.1rem;
+  left: 0;
+  height: 1px;
+  background: var(--home-clay);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 180ms ease;
+}
+
+.home-nav-link:hover::after,
+.home-nav-link:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.home-menu-button {
+  border: 1px solid rgba(41, 44, 44, 0.3);
+  padding: 0.65rem 0.8rem;
+}
+
+.home-mobile-link {
+  display: block;
+  padding-block: 0.8rem;
+}
+
+.home-hero {
+  display: grid;
+  min-height: calc(100vh - 4.75rem);
+  background: #dfe7ed;
+}
+
+.home-hero-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5.5rem 1.5rem 4rem;
+}
+
+.home-kicker {
+  margin: 0;
+  color: var(--home-clay);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.home-hero h1,
+.home-section-heading h2,
+.home-statement h2,
+.home-poetry h2,
+.home-commission h2 {
+  margin: 1.25rem 0 0;
+  color: var(--home-ink);
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(3.5rem, 10vw, 8.5rem);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 0.84;
+}
+
+.home-hero h1 em {
+  font-weight: 400;
+}
+
+.home-introduction {
+  max-width: 28rem;
+  margin: 2rem 0 0;
+  color: rgba(41, 44, 44, 0.76);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.8;
+}
+
+.home-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  width: fit-content;
+  gap: 2.5rem;
+  margin-top: 2.5rem;
+  padding: 0.95rem 1.1rem 0.95rem 1.35rem;
+  background: var(--home-ink);
+  color: white;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: background 180ms ease, color 180ms ease;
+}
+
+.home-button:hover {
+  background: var(--home-clay);
+}
+
+.home-button span {
+  font-size: 1.1rem;
+  line-height: 0;
+}
+
+.home-hero-art {
+  position: relative;
+  min-height: 31rem;
+  margin: 0;
+  overflow: hidden;
+  background: #3f5873;
+}
+
+.home-hero-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-hero-art figcaption,
+.home-work figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--home-ink);
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.1rem;
+}
+
+.home-hero-art figcaption {
+  position: absolute;
+  right: 1.25rem;
+  bottom: 1.1rem;
+  left: 1.25rem;
+  color: white;
+}
+
+.home-hero-art figcaption span:last-child,
+.home-work figcaption span:last-child {
+  font-family: "Montserrat", sans-serif;
+  font-size: 0.57rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.home-works {
+  max-width: 90rem;
+  margin: 0 auto;
+  padding: 7rem 1.5rem;
+}
+
+.home-section-heading {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 3.75rem;
+}
+
+.home-section-heading h2,
+.home-statement h2,
+.home-poetry h2,
+.home-commission h2 {
+  font-size: clamp(3.2rem, 6.5vw, 6.2rem);
+}
+
+.home-text-link {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  gap: 0.9rem;
+  border-bottom: 1px solid var(--home-clay);
+  padding-bottom: 0.45rem;
+  color: var(--home-ink);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: color 180ms ease, border-color 180ms ease;
+}
+
+.home-text-link:hover {
+  border-color: var(--home-ink);
+  color: var(--home-clay);
+}
+
+.home-work-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem 1rem;
+  align-items: end;
+}
+
+.home-work {
+  display: block;
+}
+
+.home-work--wide {
+  grid-column: 1 / -1;
+}
+
+.home-work figure {
+  margin: 0;
+}
+
+.home-work-image {
+  overflow: hidden;
+  background: #d7d3ca;
+}
+
+.home-work--wide .home-work-image {
+  aspect-ratio: 1.38 / 1;
+}
+
+.home-work--tall .home-work-image {
+  aspect-ratio: 0.69 / 1;
+}
+
+.home-work--square .home-work-image {
+  aspect-ratio: 0.92 / 1;
+}
+
+.home-work img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 500ms ease;
+}
+
+.home-work:hover img,
+.home-work:focus-visible img {
+  transform: scale(1.025);
+}
+
+.home-work figcaption {
+  padding-top: 0.7rem;
+}
+
+.home-statement {
+  display: grid;
+  gap: 3rem;
+  align-items: center;
+  padding: 6rem 1.5rem;
+  background: #e6d9c8;
+}
+
+.home-statement-mark {
+  color: rgba(170, 106, 63, 0.75);
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(6rem, 20vw, 12rem);
+  font-style: italic;
+  line-height: 0.65;
+}
+
+.home-statement > div:last-child {
+  max-width: 37rem;
+}
+
+.home-statement p:not(.home-kicker) {
+  max-width: 31rem;
+  margin: 1.75rem 0 0;
+  color: rgba(41, 44, 44, 0.78);
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1.8;
+}
+
+.home-statement .home-text-link {
+  margin-top: 2rem;
+}
+
+.home-poetry {
+  display: grid;
+  background: var(--home-ink);
+}
+
+.home-poetry-image {
+  min-height: 20rem;
+  background: url("images/primarybgs/heroimg.png") center / cover no-repeat;
+}
+
+.home-poetry-copy {
+  padding: 5rem 1.5rem;
+}
+
+.home-poetry h2 {
+  color: white;
+}
+
+.home-poetry blockquote {
+  margin: 2rem 0 0;
+  color: rgba(255, 255, 255, 0.76);
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-style: italic;
+  line-height: 1.3;
+}
+
+.home-button--light {
+  background: #f7f4ed;
+  color: var(--home-ink);
+}
+
+.home-button--light:hover {
+  background: var(--home-clay);
+  color: white;
+}
+
+.home-commission {
+  padding: 7rem 1.5rem;
+  background: #bd7952;
+  color: var(--home-ink);
+  text-align: center;
+}
+
+.home-commission .home-kicker {
+  color: #5f3725;
+}
+
+.home-commission h2 {
+  max-width: 48rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.home-commission > p:not(.home-kicker) {
+  margin: 1.75rem auto 0;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.home-commission .home-text-link {
+  margin-top: 2.5rem;
+}
+
+.home-footer {
+  display: grid;
+  gap: 2.5rem;
+  padding: 3rem 1.5rem 2rem;
+  background: #171a19;
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.home-footer p {
+  margin: 0.5rem 0 0;
+  font-size: 0.66rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.home-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+}
+
+.home-footer-links a {
+  color: white;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.home-copyright {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+@media (min-width: 640px) {
+  .home-hero-copy,
+  .home-works,
+  .home-statement,
+  .home-poetry-copy,
+  .home-commission,
+  .home-footer {
+    padding-right: 3rem;
+    padding-left: 3rem;
+  }
+
+  .home-work-grid {
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    gap: 3.5rem 2rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .home-hero {
+    grid-template-columns: minmax(27rem, 0.94fr) minmax(32rem, 1.06fr);
+  }
+
+  .home-hero-copy {
+    padding: 6rem clamp(3rem, 8vw, 9rem);
+  }
+
+  .home-hero-art {
+    min-height: calc(100vh - 4.75rem);
+  }
+
+  .home-hero-art figcaption {
+    right: 2.5rem;
+    bottom: 2rem;
+    left: 2.5rem;
+  }
+
+  .home-works {
+    padding-top: 10rem;
+    padding-bottom: 10rem;
+  }
+
+  .home-section-heading {
+    grid-template-columns: 1fr 2fr auto;
+    gap: 2rem;
+    align-items: end;
+    margin-bottom: 5rem;
+  }
+
+  .home-section-heading h2 {
+    margin: 0;
+  }
+
+  .home-work-grid {
+    grid-template-columns: 1.15fr 0.72fr 0.93fr;
+    gap: clamp(1.5rem, 3.7vw, 4.5rem);
+  }
+
+  .home-work--wide {
+    grid-column: auto;
+    grid-row: span 2;
+  }
+
+  .home-work--wide .home-work-image {
+    aspect-ratio: 0.86 / 1;
+  }
+
+  .home-work--tall .home-work-image {
+    aspect-ratio: 0.7 / 1;
+  }
+
+  .home-work--square .home-work-image {
+    aspect-ratio: 1 / 0.84;
+  }
+
+  .home-work--square {
+    align-self: start;
+    margin-top: 7rem;
+  }
+
+  .home-statement {
+    grid-template-columns: minmax(13rem, 0.7fr) minmax(28rem, 1fr);
+    gap: 8rem;
+    padding: 9rem max(3rem, calc((100vw - 72rem) / 2));
+  }
+
+  .home-statement-mark {
+    text-align: right;
+  }
+
+  .home-poetry {
+    grid-template-columns: 1fr 1fr;
+    min-height: 44rem;
+  }
+
+  .home-poetry-image {
+    min-height: auto;
+  }
+
+  .home-poetry-copy {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem clamp(3rem, 8vw, 9rem);
+  }
+
+  .home-commission {
+    padding-top: 9rem;
+    padding-bottom: 9rem;
+  }
+
+  .home-footer {
+    grid-template-columns: 1fr auto auto;
+    align-items: end;
+    padding: 3rem max(3rem, calc((100vw - 82rem) / 2));
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

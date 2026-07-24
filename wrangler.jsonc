@@ -1,0 +1,36 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "rosemary-williams-art",
+  "pages_build_output_dir": ".",
+  "compatibility_date": "2026-07-23",
+  "compatibility_flags": ["nodejs_compat"],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "rosemary-gallery",
+      "database_id": "68f63a25-d25e-4177-8cb4-f8f08ba644b7"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "ART_BUCKET",
+      "bucket_name": "rosemary-art"
+    }
+  ],
+  "vars": {
+    "PUBLIC_IMAGE_BASE_URL": "https://media.rosemarywilliams.art",
+    "CF_ACCESS_TEAM_DOMAIN": "REPLACE_WITH_TEAM_NAME.cloudflareaccess.com",
+    "CF_ACCESS_AUD": "REPLACE_WITH_ACCESS_APPLICATION_AUD",
+    "MAX_STORAGE_BYTES": "9000000000"
+  },
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "head_sampling_rate": 1
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.01
+    }
+  }
+}

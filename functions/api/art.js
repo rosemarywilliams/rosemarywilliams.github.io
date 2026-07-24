@@ -1,39 +1,29 @@
-export async function onRequest(context) {
-  // 1. Setup
-  const { request, env } = context;
-  const key = "art_gallery_data";
+import { handleError, json } from "../_lib/http.js";
+import { serializeArtwork } from "../_lib/artworks.js";
 
-  // 2. Handle CORS (Allows your website to talk to this backend)
-  const corsHeaders = {
-    "Access-Control-Allow-Origin": "*", 
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Headers": "Content-Type",
-  };
-
-  if (request.method === "OPTIONS") {
-    return new Response("OK", { headers: corsHeaders });
-  }
-
-  // 3. GET Request: Someone visits art.html (Loading the gallery)
-  if (request.method === "GET") {
-    // We look inside the KV (memory) for the data
-    const data = await env.GALLERY_KV.get(key);
-    return new Response(data || "[]", {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
-
-  // 4. POST Request: You click "Save" on editart.html
-  if (request.method === "POST") {
-    try {
-      const data = await request.text();
-      // Save the new list into the KV (memory)
-      await env.GALLERY_KV.put(key, data);
-      return new Response("Saved", { headers: corsHeaders });
-    } catch (err) {
-      return new Response("Error saving", { status: 500, headers: corsHeaders });
+export async function onRequestGet(context) {
+  try {
+    if (!context.env.DB) {
+      throw new Error("The DB binding is missing.");
     }
-  }
 
-  return new Response("Method not allowed", { status: 405, headers: corsHeaders });
+    const result = await context.env.DB.prepare(
+      `SELECT *
+       FROM artworks
+       WHERE is_hidden = 0
+       ORDER BY sort_order ASC, created_at ASC
+       LIMIT 2000`,
+    ).all();
+
+    return json(
+      result.results.map((row) => serializeArtwork(row, context.env, context.request.url)),
+      {
+        headers: {
+          "Cache-Control": "public, max-age=0, must-revalidate",
+        },
+      },
+    );
+  } catch (error) {
+    return handleError(error, context.request, "list_public_artworks");
+  }
 }

@@ -244,69 +244,74 @@
             "translate-y-24", "translate-y-32", "translate-y-36", "translate-y-40"
         ]);
 
-        function escapeHtml(value) {
-            return String(value)
-                .replaceAll("&", "&amp;")
-                .replaceAll("<", "&lt;")
-                .replaceAll(">", "&gt;")
-                .replaceAll('"', "&quot;")
-                .replaceAll("'", "&#039;");
-        }
-
         document.addEventListener('DOMContentLoaded', async () => {
             const galleryWall = document.getElementById('gallery-wall');
             let artCollection = [];
-            
-            // Try to fetch from Cloudflare Worker
+            let apiLoaded = false;
+
             try {
-                // We use the absolute URL to bypass GitHub's routing
-                const response = await fetch(API_URL);
+                const response = await fetch(API_URL, {
+                    headers: { Accept: "application/json" },
+                    credentials: "same-origin"
+                });
                 if (response.ok) {
                     const json = await response.json();
-                    if (Array.isArray(json) && json.length > 0) {
+                    if (Array.isArray(json)) {
                         artCollection = json;
+                        apiLoaded = true;
                     }
                 }
             } catch (err) {
                 console.log("Using default collection (API unavailable or empty):", err);
             }
 
-            // Fallback
-            if (artCollection.length === 0) {
+            if (!apiLoaded) {
                 artCollection = DEFAULT_ART;
             }
 
-            // Clear loading state
             galleryWall.innerHTML = '';
+            const visibleArt = artCollection.filter(art => !art.hidden);
+            galleryWall.parentElement.style.minWidth = `${Math.max(100, visibleArt.length * 38)}vw`;
 
-            artCollection.forEach(art => {
-                // If the user hid this piece in the editor, skip it
-                if (art.hidden) return;
+            if (visibleArt.length === 0) {
+                const emptyMessage = document.createElement("p");
+                emptyMessage.className = "text-white/70 font-serif text-2xl";
+                emptyMessage.textContent = "New work is being prepared for the gallery.";
+                galleryWall.appendChild(emptyMessage);
+                return;
+            }
 
-                // Create the element
+            visibleArt.forEach(art => {
                 const artDiv = document.createElement('div');
-                
                 let containerClasses = `shrink-0 cursor-pointer relative group transition-transform duration-500 hover:scale-[1.02]`;
                 
                 const yOffset = OFFSET_CLASSES.has(art.yOffset) ? art.yOffset : 'translate-y-0';
                 containerClasses += ` ${yOffset}`;
-
                 if (art.margin === "mr-20") containerClasses += ` ${art.margin}`;
-
                 artDiv.className = containerClasses;
+
                 const frameClass = FRAME_CLASSES.has(art.frame) ? art.frame : "frame-1";
-                const title = escapeHtml(art.title || "Untitled");
-                const src = escapeHtml(art.src || "");
+                const title = String(art.title || "Untitled");
+                const src = art.imageUrl || art.src || "";
+                const description = art.altText || title;
 
-                artDiv.innerHTML = `
-                    <div class="${frameClass}">
-                        <img src="${src}" class="max-w-[500px] max-h-[500px] w-auto h-auto object-cover shadow-inner-mat" alt="${title}">
-                    </div>
-                    <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-400 mt-4 text-center font-serif italic text-white text-sm absolute left-0 w-full top-full">
-                        "${title}"
-                    </div>
-                `;
+                const frame = document.createElement("div");
+                frame.className = frameClass;
 
+                const image = document.createElement("img");
+                image.src = src;
+                image.alt = description;
+                image.loading = "lazy";
+                image.decoding = "async";
+                image.className = "max-w-[500px] max-h-[500px] w-auto h-auto object-cover shadow-inner-mat";
+                frame.appendChild(image);
+
+                const caption = document.createElement("div");
+                caption.className = "opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-400 mt-4 text-center font-serif italic text-white text-sm absolute left-0 w-full top-full";
+                const details = [art.medium, art.year].filter(Boolean).join(" · ");
+                caption.textContent = details ? `“${title}” — ${details}` : `“${title}”`;
+
+                artDiv.append(frame, caption);
                 galleryWall.appendChild(artDiv);
             });
         });

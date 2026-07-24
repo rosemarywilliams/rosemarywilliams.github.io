@@ -3,178 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Original art and poetry by Rosemary Williams. Explore the gallery, read recent poems, and inquire about commissions.">
-    <title>Rosemary Williams | Art and Poetry</title>
+    <meta name="description" content="Original paintings and poetry by Rosemary Williams. Explore a collection shaped by memory, landscape, and the light of ordinary moments.">
+    <title>Rosemary Williams | Artist</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
         theme: {
           extend: {
-            fontFamily: {
-              sans: ["Montserrat", "sans-serif"],
-              serif: ["Cormorant Garamond", "serif"],
-            },
-            colors: {
-              cream: "#fcfbf9",
-              paper: "#f2efea",
-              gold: "#d4af37",
-              charcoal: "#2c2c2c",
-              ink: "#171717",
-            },
-            boxShadow: {
-              frame: "0 18px 45px -20px rgba(0, 0, 0, 0.55)",
-            },
+            fontFamily: { sans: ["Montserrat", "sans-serif"], serif: ["Cormorant Garamond", "serif"] },
+            colors: { cream: "#f7f4ed", paper: "#e8e1d4", gold: "#aa6a3f", charcoal: "#292c2c", ink: "#171a19" },
           },
         },
       };
     </script>
     <link rel="stylesheet" href="site.css">
 </head>
-<body class="bg-cream text-charcoal font-sans antialiased">
+<body class="home-page bg-cream text-charcoal font-sans antialiased">
     <a href="#main-content" class="skip-link">Skip to content</a>
 
-    <nav class="fixed top-0 left-0 right-0 z-40 border-b border-white/20 bg-cream/90 backdrop-blur-md">
-        <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:px-8">
-            <a href="index.html" class="focus-ring font-serif text-2xl font-semibold tracking-wide text-charcoal md:text-3xl">Rosemary Williams</a>
-            <div class="hidden items-center gap-7 md:flex">
-                <a href="index.html" class="text-xs font-semibold uppercase tracking-[0.18em] text-charcoal">Home</a>
-                <a href="art.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Art</a>
-                <a href="poetry.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Poetry</a>
-                <a href="commissions.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Commissions</a>
-                <a href="about.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">About</a>
-                <a href="contact.html" class="text-xs font-medium uppercase tracking-[0.18em] text-charcoal/70 transition hover:text-charcoal">Contact</a>
+    <nav class="home-nav relative z-40 border-b border-charcoal/10 bg-cream">
+        <div class="mx-auto flex h-[4.75rem] max-w-[90rem] items-center justify-between px-5 md:px-10">
+            <a href="index.html" class="focus-ring font-serif text-[1.7rem] font-medium leading-none tracking-wide text-charcoal md:text-[2rem]">Rosemary Williams</a>
+            <div class="hidden items-center gap-7 lg:flex">
+                <a href="art.html" class="home-nav-link">Art</a>
+                <a href="poetry.html" class="home-nav-link">Poetry</a>
+                <a href="commissions.html" class="home-nav-link">Commissions</a>
+                <a href="about.html" class="home-nav-link">About</a>
+                <a href="contact.html" class="home-nav-link">Contact</a>
             </div>
-            <button type="button" class="focus-ring md:hidden rounded-sm border border-charcoal/15 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em]" aria-controls="mobile-menu" aria-expanded="false" data-menu-button>Menu</button>
+            <button type="button" class="focus-ring home-menu-button lg:hidden" aria-controls="mobile-menu" aria-expanded="false" data-menu-button>Menu</button>
         </div>
-        <div id="mobile-menu" class="mobile-menu border-t border-charcoal/10 bg-cream px-5 py-4 md:hidden">
-            <a href="index.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Home</a>
-            <a href="art.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Art</a>
-            <a href="poetry.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Poetry</a>
-            <a href="commissions.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Commissions</a>
-            <a href="about.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">About</a>
-            <a href="contact.html" class="py-3 text-sm uppercase tracking-[0.18em] text-charcoal">Contact</a>
+        <div id="mobile-menu" class="mobile-menu border-t border-charcoal/10 bg-cream px-5 py-4 lg:hidden">
+            <a href="art.html" class="home-mobile-link">Art</a>
+            <a href="poetry.html" class="home-mobile-link">Poetry</a>
+            <a href="commissions.html" class="home-mobile-link">Commissions</a>
+            <a href="about.html" class="home-mobile-link">About</a>
+            <a href="contact.html" class="home-mobile-link">Contact</a>
         </div>
     </nav>
 
-    <header class="relative min-h-[92vh] overflow-hidden pt-16">
-        <img src="images/primarybgs/heroimg.png" alt="Painting detail from Rosemary Williams' studio" class="absolute inset-0 h-full w-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-b from-black/45 via-black/15 to-cream"></div>
-        <div class="relative z-10 mx-auto flex min-h-[calc(92vh-4rem)] max-w-7xl flex-col justify-end px-5 pb-16 md:px-8 md:pb-20">
-            <div class="max-w-3xl text-white">
-                <p class="mb-4 text-xs font-semibold uppercase tracking-[0.24em] text-white/80">Art and poetry</p>
-                <h1 class="font-serif text-6xl font-semibold leading-none md:text-8xl">Rosemary Williams</h1>
-                <p class="mt-6 max-w-2xl text-lg font-light leading-8 text-white/90 md:text-xl">Original paintings and poems shaped by landscape, memory, weather, and quiet observation.</p>
-                <div class="mt-8 flex flex-col gap-3 sm:flex-row">
-                    <a href="art.html" class="focus-ring inline-flex items-center justify-center bg-white px-7 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-charcoal transition hover:bg-gold hover:text-white">Explore Art</a>
-                    <a href="poetry.html" class="focus-ring inline-flex items-center justify-center border border-white/70 px-7 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-white hover:text-charcoal">Read Poetry</a>
-                </div>
-            </div>
+    <header class="home-hero">
+        <div class="home-hero-copy">
+            <p class="home-kicker">Rosemary Williams · Artist &amp; Poet</p>
+            <h1>Painting the<br><em>things that stay.</em></h1>
+            <p class="home-introduction">A collection of paintings and poems rooted in landscape, memory, and the quiet theatre of everyday life.</p>
+            <a href="art.html" class="focus-ring home-button">View selected works <span aria-hidden="true">↗</span></a>
         </div>
+        <figure class="home-hero-art">
+            <img src="images/art/img17.png" alt="The First Morning, an abstract painting in blue and white by Rosemary Williams">
+            <figcaption><span>The First Morning</span><span>Oil on canvas</span></figcaption>
+        </figure>
     </header>
 
     <main id="main-content">
-        <section class="bg-cream px-5 py-16 md:px-8">
-            <div class="mx-auto grid max-w-7xl gap-10 md:grid-cols-[0.9fr_1.1fr] md:items-end">
-                <div class="soft-reveal">
-                    <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold">Studio practice</p>
-                    <h2 class="mt-4 font-serif text-4xl font-semibold leading-tight text-charcoal md:text-6xl">A practice of looking closely.</h2>
-                </div>
-                <p class="soft-reveal text-lg font-light leading-8 text-charcoal/70">Rosemary's work brings painting and poetry into the same room: image, language, weather, and feeling held long enough to reveal their shape.</p>
+        <section class="home-works" aria-labelledby="works-title">
+            <div class="home-section-heading soft-reveal">
+                <p class="home-kicker">A small selection</p>
+                <h2 id="works-title">Works from the studio</h2>
+                <a href="art.html" class="focus-ring home-text-link">See the full gallery <span aria-hidden="true">→</span></a>
+            </div>
+
+            <div class="home-work-grid">
+                <a href="art.html" class="home-work home-work--wide soft-reveal">
+                    <figure>
+                        <div class="home-work-image"><img src="images/art/img3.png" alt="Valley Silence, a watercolor landscape with a red truck"></div>
+                        <figcaption><span>Valley Silence</span><span>Watercolor</span></figcaption>
+                    </figure>
+                </a>
+                <a href="art.html" class="home-work home-work--tall soft-reveal">
+                    <figure>
+                        <div class="home-work-image"><img src="images/art/img12.png" alt="Study in Blue, a painting of a girl and cat looking at the moon"></div>
+                        <figcaption><span>Study in Blue</span><span>Acrylic</span></figcaption>
+                    </figure>
+                </a>
+                <a href="art.html" class="home-work home-work--square soft-reveal">
+                    <figure>
+                        <div class="home-work-image"><img src="images/art/img17.png" alt="The First Morning, an abstract painting in blue and white"></div>
+                        <figcaption><span>The First Morning</span><span>Oil on canvas</span></figcaption>
+                    </figure>
+                </a>
             </div>
         </section>
 
-        <section class="bg-paper px-5 py-16 md:px-8">
-            <div class="mx-auto max-w-7xl">
-                <div class="mb-9 flex flex-col justify-between gap-4 md:flex-row md:items-end">
-                    <div>
-                        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold">Featured paths</p>
-                        <h2 class="mt-3 font-serif text-4xl font-semibold text-charcoal md:text-5xl">Enter the work</h2>
-                    </div>
-                    <a href="contact.html" class="focus-ring text-sm font-semibold uppercase tracking-[0.18em] text-charcoal underline decoration-gold underline-offset-8">Start a conversation</a>
-                </div>
-
-                <div class="grid gap-5 md:grid-cols-3">
-                    <a href="art.html" class="art-card focus-ring group relative min-h-[430px] overflow-hidden bg-charcoal shadow-frame">
-                        <img src="images/art/img17.png" alt="Framed artwork from the Rosemary Williams gallery" class="absolute inset-0 h-full w-full object-cover">
-                        <div class="absolute inset-0 bg-black/35 transition group-hover:bg-black/20"></div>
-                        <div class="absolute inset-x-0 bottom-0 p-7 text-white">
-                            <p class="text-xs uppercase tracking-[0.22em] text-white/75">Gallery</p>
-                            <h3 class="mt-3 font-serif text-4xl italic">Explore Art</h3>
-                        </div>
-                    </a>
-                    <a href="poetry.html" class="art-card focus-ring group relative min-h-[430px] overflow-hidden bg-charcoal shadow-frame">
-                        <img src="images/art/img12.png" alt="Abstract blue artwork used as a visual entry to poetry" class="absolute inset-0 h-full w-full object-cover">
-                        <div class="absolute inset-0 bg-black/40 transition group-hover:bg-black/25"></div>
-                        <div class="absolute inset-x-0 bottom-0 p-7 text-white">
-                            <p class="text-xs uppercase tracking-[0.22em] text-white/75">Poems</p>
-                            <h3 class="mt-3 font-serif text-4xl italic">Read Poetry</h3>
-                        </div>
-                    </a>
-                    <a href="commissions.html" class="art-card focus-ring group relative min-h-[430px] overflow-hidden bg-charcoal shadow-frame">
-                        <img src="images/art/img3.png" alt="Artwork detail for commission inquiries" class="absolute inset-0 h-full w-full object-cover">
-                        <div class="absolute inset-0 bg-black/35 transition group-hover:bg-black/20"></div>
-                        <div class="absolute inset-x-0 bottom-0 p-7 text-white">
-                            <p class="text-xs uppercase tracking-[0.22em] text-white/75">Custom work</p>
-                            <h3 class="mt-3 font-serif text-4xl italic">Commission a Piece</h3>
-                        </div>
-                    </a>
-                </div>
+        <section class="home-statement" aria-labelledby="statement-title">
+            <div class="home-statement-mark" aria-hidden="true">RW</div>
+            <div class="soft-reveal">
+                <p class="home-kicker">The practice</p>
+                <h2 id="statement-title">To notice is to begin.</h2>
+                <p>Rosemary works across paint, pencil, and language to follow a moment a little further—the turn of weather, the presence of an animal, a remembered room. Each piece is an invitation to linger.</p>
+                <a href="about.html" class="focus-ring home-text-link">Meet Rosemary <span aria-hidden="true">→</span></a>
             </div>
         </section>
 
-        <section class="bg-white px-5 py-20 md:px-8">
-            <div class="mx-auto grid max-w-7xl gap-10 md:grid-cols-[1fr_0.85fr] md:items-center">
-                <div class="soft-reveal">
-                    <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold">Recent poem</p>
-                    <h2 class="mt-3 font-serif text-4xl font-semibold text-charcoal md:text-5xl">Notes from the Garden</h2>
-                    <p class="mt-6 font-serif text-2xl italic leading-10 text-charcoal/70">The day leaves gold along the fence,<br>then folds itself into the trees.<br>What stays is not the light alone,<br>but how the evening learns to breathe.</p>
-                    <a href="poetry.html" class="focus-ring mt-8 inline-flex border-b border-gold pb-1 font-serif text-xl italic text-gold transition hover:text-charcoal">Read more poems</a>
-                </div>
-                <div class="soft-reveal border-l border-gold/40 pl-8">
-                    <p class="text-lg font-light leading-8 text-charcoal/70">Paintings and poems both begin with attention. The studio list gathers new work, seasonal notes, and commission openings as they are ready.</p>
-                    <a href="contact.html" class="focus-ring mt-7 inline-flex bg-charcoal px-7 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white transition hover:bg-gold">Inquire</a>
-                </div>
+        <section class="home-poetry" aria-labelledby="poetry-title">
+            <div class="home-poetry-image" role="img" aria-label="A collage of Rosemary Williams' paintings"></div>
+            <div class="home-poetry-copy soft-reveal">
+                <p class="home-kicker">Words from the studio</p>
+                <h2 id="poetry-title">The paintings have another voice.</h2>
+                <blockquote>“What stays is not the light alone,<br>but how the evening learns to breathe.”</blockquote>
+                <a href="poetry.html" class="focus-ring home-button home-button--light">Read the poetry <span aria-hidden="true">↗</span></a>
             </div>
         </section>
 
-        <section class="bg-charcoal px-5 py-20 text-white md:px-8">
-            <div class="mx-auto grid max-w-7xl gap-10 md:grid-cols-3">
-                <div class="md:col-span-1">
-                    <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold">Commissions</p>
-                    <h2 class="mt-3 font-serif text-4xl font-semibold md:text-5xl">A personal piece, carefully made.</h2>
-                </div>
-                <div class="grid gap-6 md:col-span-2 md:grid-cols-3">
-                    <div class="border-t border-white/20 pt-5">
-                        <h3 class="font-serif text-2xl">Share</h3>
-                        <p class="mt-3 text-sm leading-7 text-white/65">Send the story, subject, scale, timing, and any references that matter.</p>
-                    </div>
-                    <div class="border-t border-white/20 pt-5">
-                        <h3 class="font-serif text-2xl">Study</h3>
-                        <p class="mt-3 text-sm leading-7 text-white/65">Rosemary considers composition, palette, materials, and fit before work begins.</p>
-                    </div>
-                    <div class="border-t border-white/20 pt-5">
-                        <h3 class="font-serif text-2xl">Create</h3>
-                        <p class="mt-3 text-sm leading-7 text-white/65">The final piece is prepared for pickup, delivery, or shipping when complete.</p>
-                    </div>
-                </div>
-            </div>
+        <section class="home-commission" aria-labelledby="commission-title">
+            <p class="home-kicker">Commissions</p>
+            <h2 id="commission-title">A painting made<br>for your story.</h2>
+            <p>For a place, a person, or a memory worth keeping close.</p>
+            <a href="commissions.html" class="focus-ring home-text-link">Begin a commission <span aria-hidden="true">→</span></a>
         </section>
     </main>
 
-    <footer class="bg-ink px-5 py-12 text-center text-sm text-white/55 md:px-8">
-        <div class="font-serif text-3xl text-white">Rosemary Williams</div>
-        <div class="mt-6 flex flex-wrap justify-center gap-5 text-xs uppercase tracking-[0.18em]">
-            <a href="art.html" class="transition hover:text-white">Art</a>
-            <a href="poetry.html" class="transition hover:text-white">Poetry</a>
-            <a href="commissions.html" class="transition hover:text-white">Commissions</a>
-            <a href="about.html" class="transition hover:text-white">About</a>
-            <a href="contact.html" class="transition hover:text-white">Contact</a>
+    <footer class="home-footer">
+        <div>
+            <a href="index.html" class="focus-ring font-serif text-3xl text-white">Rosemary Williams</a>
+            <p>Original art &amp; poetry</p>
         </div>
-        <p class="mt-8">&copy; <span data-current-year>2026</span> Rosemary Williams Art. All rights reserved.</p>
+        <div class="home-footer-links">
+            <a href="art.html">Art</a>
+            <a href="poetry.html">Poetry</a>
+            <a href="commissions.html">Commissions</a>
+            <a href="contact.html">Contact</a>
+        </div>
+        <p class="home-copyright">© <span data-current-year>2026</span> Rosemary Williams Art</p>
     </footer>
 
     <script src="site.js"></script>
